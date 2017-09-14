@@ -1,0 +1,68 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="detailTabViewModel"
+            type="com.urban.piper.detail.viewmodel.DetailTabViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:visibility="@{detailTabViewModel.isCommentsTab?View.VISIBLE:View.GONE}">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_comments"
+                    style="@style/HNews.List"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:visibility="@{detailTabViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{detailTabViewModel.isNewsListListVisible ?View.GONE:View.VISIBLE}">
+
+                    <include
+                        layout="@layout/no_contents_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/toolbar"
+                android:visibility="@{detailTabViewModel.isCommentsTab?View.GONE:View.VISIBLE}"
+                tools:loadUrl="@{detailTabViewModel.url}"></WebView>
+
+        </FrameLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:layout_centerHorizontal="true"
+            android:theme="@style/AppTheme.OrangeAccent"
+            android:visibility="@{detailTabViewModel.progressBarVisibility}" />
+    </RelativeLayout>
+</layout>
