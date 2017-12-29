@@ -3,7 +3,13 @@ package com.urban.piper.app;
 import android.app.Application;
 import android.support.multidex.MultiDex;
 
+import com.urban.piper.data.DataManager;
+import com.urban.piper.di.component.ApplicationComponent;
+import com.urban.piper.di.component.DaggerApplicationComponent;
+import com.urban.piper.di.module.ApplicationModule;
 import com.urban.piper.utility.LogUtility;
+
+import javax.inject.Inject;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -14,14 +20,23 @@ public class UrbanPiperApplication extends Application {
     private final String TAG = UrbanPiperApplication.class.getSimpleName();
     private static UrbanPiperApplication instance;
     private RealmConfiguration realmConfigurationDNation;
+    protected ApplicationComponent applicationComponent;
 
+    @Inject
+    DataManager dataManager;
     @Override
     public void onCreate() {
         super.onCreate();
         LogUtility.i(TAG, "onCreate");
         instance = this;
+        applicationComponent = DaggerApplicationComponent
+                .builder()
+                .applicationModule(new ApplicationModule(this))
+                .build();
+        applicationComponent.inject(this);
         initializeRealmData();
         MultiDex.install(this);
+
     }
 
     private void initializeRealmData() {
@@ -31,6 +46,7 @@ public class UrbanPiperApplication extends Application {
                 .schemaVersion(0)
                 .deleteRealmIfMigrationNeeded()
                 .build();
+
     }
 
 
@@ -45,4 +61,8 @@ public class UrbanPiperApplication extends Application {
         Realm.setDefaultConfiguration(realmConfigurationDNation);
     }
 
+
+    public ApplicationComponent getComponent(){
+        return applicationComponent;
+    }
 }

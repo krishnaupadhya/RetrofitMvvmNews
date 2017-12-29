@@ -24,15 +24,20 @@ public class ItemNewsViewModel extends BaseObservable {
     private int articlePosition;
     private String TAG = ItemNewsViewModel.class.getName();
     public ObservableField<Boolean> isComments;
+    public ObservableField<Integer> itemQuantity;
+    public ObservableField<Double> itemTotalPrice;
 
     public ItemNewsViewModel(ArticleInfo languagesData, int position, boolean isComments) {
         this.articleInfo = languagesData;
         this.isComments = new ObservableField<>(isComments);
+        this.itemTotalPrice = new ObservableField<>();
+        this.itemQuantity = new ObservableField<>();
         this.articlePosition = position;
         if (this.articleInfo == null) {
             this.articleInfo = new ArticleInfo();
         }
     }
+
 
     public String getTitle() {
         if (!TextUtils.isEmpty(articleInfo.getTitle()))
@@ -41,12 +46,33 @@ public class ItemNewsViewModel extends BaseObservable {
             return StringUtility.EMPTY;
     }
 
-    public String getComment() {
-        if (!TextUtils.isEmpty(articleInfo.getCommentText()))
-            return stripHtml(articleInfo.getCommentText()).toString();
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity.set(itemQuantity);
+    }
+
+    public void setItemTotalPrice(Double itemTotalPrice) {
+        this.itemTotalPrice.set(itemTotalPrice);
+    }
+
+    public String getImageUrl() {
+        if (!TextUtils.isEmpty(articleInfo.getImageUrl()))
+            return articleInfo.getImageUrl();
         else
             return StringUtility.EMPTY;
     }
+
+    public String getQuantity() {
+        return articleInfo.getQuantity() + "";
+    }
+
+    public boolean getIsNonVegItem() {
+        return articleInfo.isNonVeg();
+    }
+
+    public String getPrice() {
+        return "₹ " + articleInfo.getPrice() + "";
+    }
+
 
     public String getTime() {
         return DateTimeUtility.getConvertedDate(articleInfo.getDate());
@@ -87,7 +113,7 @@ public class ItemNewsViewModel extends BaseObservable {
 
     public Spanned stripHtml(String html) {
 
-            return Html.fromHtml(html);
+        return Html.fromHtml(html);
 
     }
 }

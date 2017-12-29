@@ -24,6 +24,15 @@ public class ArticleInfo extends RealmObject {
     @SerializedName("by")
     private String articleBy;
 
+    @SerializedName("imageUrl")
+    private String imageUrl;
+
+    private int quantity;
+
+    private double price;
+
+    private boolean isNonVeg;
+
     @SerializedName("text")
     private String commentText;
 
@@ -86,5 +95,37 @@ public class ArticleInfo extends RealmObject {
 
     public String getType() {
         return type;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isNonVeg() {
+        return isNonVeg;
+    }
+
+    public void setNonVeg(boolean nonVeg) {
+        isNonVeg = nonVeg;
     }
 }

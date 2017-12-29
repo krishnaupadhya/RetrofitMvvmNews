@@ -23,6 +23,7 @@ import com.urban.piper.R;
 import com.urban.piper.auth.listener.LoginListener;
 import com.urban.piper.auth.viewmodel.LoginActivityViewModel;
 import com.urban.piper.common.view.BaseActivity;
+import com.urban.piper.data.DataManager;
 import com.urban.piper.databinding.LoginActivityBinding;
 import com.urban.piper.home.view.HomeActivity;
 import com.urban.piper.manager.SessionManager;
@@ -30,6 +31,8 @@ import com.urban.piper.utility.DialogUtility;
 import com.urban.piper.utility.NetworkUtility;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 /**
  * Created by Krishna Upadhya on 9/6/2017.
@@ -41,10 +44,15 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     private final String TAG = LoginActivity.class.getSimpleName();
     private SignInButton signInButton;
 
+    @Inject
+    DataManager mDataManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
+       //
+        // getActivityComponent().inject(this);
     }
 
     private void initBinding() {
@@ -102,6 +110,7 @@ public class LoginActivity extends BaseActivity implements LoginListener {
                                 SessionManager.setUserName(account.getDisplayName());
                                 SessionManager.setProfileImageUrl(account.getPhotoUrl().toString());
                                 SessionManager.setSessionToken(accessToken);
+                                mDataManager.saveAccessToken(accessToken);
                             }
                             runOnUiThread(new Runnable() {
                                 public void run() {

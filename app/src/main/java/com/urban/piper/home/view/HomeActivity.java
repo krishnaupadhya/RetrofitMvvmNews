@@ -50,6 +50,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private ArrayList<ArticleInfo> artliclesList;
     private NavigationHeaderViewModel navigationHeaderViewModel;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +68,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onRefresh() {
                 homeActivityBinding.swipeRefreshLayout.setRefreshing(false);
-                homeViewModel.getNewsList();
+                //  homeViewModel.getNewsList();
             }
         });
     }
@@ -79,6 +80,74 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 artliclesList = new ArrayList<>();
             artliclesList.addAll(cachedArticles);
             setupListLanguagesView(artliclesList);
+        } else {
+            artliclesList = new ArrayList<>();
+            ArticleInfo info = new ArticleInfo();
+            info.setTitle("Schezwan Fried Rice");
+            info.setImageUrl("https://i.ytimg.com/vi/OUhyJPJlfS8/maxresdefault.jpg");
+            info.setPrice(105);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Spatchcock Teriyaki Chicken with Quinoa Brown Rice");
+            info.setImageUrl("https://www.holleygrainger.com/wp-content/uploads/2016/10/One-Pan-Spatchcock-Chicken-and-Veggies-22.jpg");
+            info.setPrice(230);
+            info.setQuantity(0);
+            info.setNonVeg(true);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Jaipuri Kofta");
+            info.setImageUrl("http://www.11flowers.in/restaurant/wp-content/uploads/2017/11/jaipuri-veg-kofta-300x300.jpg");
+            info.setPrice(110);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Cheesy Cajun Chicken Burger");
+            info.setImageUrl("https://www.bbcgoodfood.com/sites/default/files/styles/carousel_small/public/recipe_images/cajun.jpg?itok=sYUO0-bd");
+            info.setPrice(105);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Schezwan Fried Rice");
+            info.setImageUrl("https://i.ytimg.com/vi/OUhyJPJlfS8/maxresdefault.jpg");
+            info.setPrice(105);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Spatchcock Teriyaki Chicken with Quinoa Brown Rice");
+            info.setImageUrl("https://www.holleygrainger.com/wp-content/uploads/2016/10/One-Pan-Spatchcock-Chicken-and-Veggies-22.jpg");
+            info.setPrice(230);
+            info.setQuantity(0);
+            info.setNonVeg(true);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Jaipuri Kofta");
+            info.setImageUrl("http://www.11flowers.in/restaurant/wp-content/uploads/2017/11/jaipuri-veg-kofta-300x300.jpg");
+            info.setPrice(110);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            info = new ArticleInfo();
+            info.setTitle("Cheesy Cajun Chicken Burger");
+            info.setImageUrl("https://www.bbcgoodfood.com/sites/default/files/styles/carousel_small/public/recipe_images/cajun.jpg?itok=sYUO0-bd");
+            info.setPrice(105);
+            info.setQuantity(0);
+            info.setNonVeg(false);
+            artliclesList.add(info);
+
+            setupListLanguagesView(artliclesList);
+
         }
     }
 
@@ -143,7 +212,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 adapter.updateNewsList(artliclesList);
             }
         }
-
     }
 
 
@@ -188,7 +256,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             finish();
         }
     }
-
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewsClickEvent(NewsClickEvent event) {

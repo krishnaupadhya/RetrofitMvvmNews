@@ -41,7 +41,7 @@ public class HomeActivityViewModel extends BaseViewModel {
         this.homeListener = homeListener;
         this.mContext = activity;
         this.isNewsListListVisible = new ObservableField<>(false);
-        getNewsList();
+        //getNewsList();
     }
 
     public void setIsNewsListListVisible(Boolean isNewsListListVisible) {

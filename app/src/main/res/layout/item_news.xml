@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
@@ -27,55 +28,85 @@
             android:onClick="@{itemNewsViewModel::onItemClick}"
             android:orientation="horizontal"
             android:padding="@dimen/padding_8dp"
-            android:visibility="@{itemNewsViewModel.isComments? View.GONE:View.VISIBLE}"
             android:weightSum="10">
 
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:background="@color/light_range">
+                android:layout_weight="2">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="@{itemNewsViewModel.score}"
-                    android:textColor="@color/davy_gray"
-                    android:textSize="22sp" />
-
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    bind:imageUrl="@{itemNewsViewModel.imageUrl}" />
 
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="6"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_5dp">
+                android:orientation="vertical">
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|center_vertical"
                     android:ellipsize="end"
                     android:fontFamily="sans-serif-light"
-                    android:maxLines="2"
+                    android:maxLines="1"
+                    android:padding="@dimen/margin_5dp"
                     android:text="@{itemNewsViewModel.title}"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="@{itemNewsViewModel.time}"
-                    android:textColor="@color/darkgray"
-                    android:textSize="@dimen/text_size_12sp" />
-            </LinearLayout>
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <FrameLayout
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:paddingLeft="@dimen/margin_5dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/non_veg"
+                            android:visibility="@{itemNewsViewModel.isNonVegItem?View.VISIBLE:View.GONE}" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/veg"
+                            android:visibility="@{itemNewsViewModel.isNonVegItem?View.GONE:View.VISIBLE}" />
+                    </FrameLayout>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-light"
+                        android:paddingLeft="@dimen/margin_5dp"
+                        android:text="@{itemNewsViewModel.price}"
+                        android:textColor="@color/black"
+                        android:textSize="15sp" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingLeft="@dimen/margin_5dp"
+                        android:text="@{itemNewsViewModel.quantity}"
+                        android:textColor="@color/davy_gray"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -88,57 +119,46 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/margin_5dp"
-                    android:paddingTop="@dimen/margin_10dp">
+                    android:paddingTop="@dimen/margin_10dp"
+                    android:weightSum="2">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@drawable/ic_mode_comment24dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:onClick="@{itemNewsViewModel::onItemClick}">
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="@{itemNewsViewModel.commentCount}"
-                        android:textColor="@color/davy_gray"
-                        android:textSize="12sp" />
+                        <ImageView
 
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+
+                            android:src="@drawable/plus" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/black" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:onClick="@{itemNewsViewModel::onItemClick}">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/minus" />
+                    </RelativeLayout>
 
                 </LinearLayout>
 
             </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            style="@style/HNews.FeedItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_8dp"
-            android:visibility="@{itemNewsViewModel.isComments? View.VISIBLE:View.GONE}">
-
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:padding="@dimen/margin_5dp"
-                android:text="@{itemNewsViewModel.comment}"
-                android:textColor="@color/davy_gray"
-                android:textSize="@dimen/text_size_16sp" />
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:text="@{itemNewsViewModel.time}"
-                android:textColor="@color/darkgray"
-                android:textSize="@dimen/text_size_12sp" />
 
         </LinearLayout>
 
