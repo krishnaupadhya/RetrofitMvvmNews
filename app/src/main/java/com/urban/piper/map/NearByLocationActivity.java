@@ -5,14 +5,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -26,7 +23,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.urban.piper.R;
+import com.urban.piper.app.Constants;
 import com.urban.piper.model.FetchNearByRestaurants;
+import com.urban.piper.network.NearByPlaceService;
+import com.urban.piper.utility.LogUtility;
+import com.urban.piper.utility.NetworkUtility;
+import com.urban.piper.utility.PermissionUtility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,15 +47,13 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
         LocationListener {
 
     private GoogleMap mMap;
-    double latitude;
-    double longitude;
-    private int PROXIMITY_RADIUS = 10000;
-    GoogleApiClient mGoogleApiClient;
-    Location mLastLocation;
-    Marker mCurrLocationMarker;
-    LocationRequest mLocationRequest;
-    private long LOCATION_INTERVAL = 1000;
-    private long FASTEST_INTERVAL = 1000;
+    private double mLatitude;
+    private double mLongitude;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+    private Marker mCurrLocationMarker;
+    private LocationRequest mLocationRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,15 +61,15 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
         setContentView(R.layout.map_activity);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            checkLocationPermission();
+            PermissionUtility.checkLocationPermission(this);
         }
 
         //Check if Google Play Services Available or not
-        if (!CheckGooglePlayServices()) {
-            Log.d("onCreate", "Finishing test case since Google Play Services are not available");
+        if (!NetworkUtility.checkGooglePlayServices(this)) {
+            LogUtility.d("onCreate", "Finishing test case since Google Play Services are not available");
             finish();
         } else {
-            Log.d("onCreate", "Google Play Services available.");
+            LogUtility.d("onCreate", "Google Play Services available.");
         }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -78,18 +78,7 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
         mapFragment.getMapAsync(this);
     }
 
-    private boolean CheckGooglePlayServices() {
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(this);
-        if (result != ConnectionResult.SUCCESS) {
-            if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result,
-                        0).show();
-            }
-            return false;
-        }
-        return true;
-    }
+
 
 
     /**
@@ -133,8 +122,8 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onConnected(Bundle bundle) {
         mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(LOCATION_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_INTERVAL);
+        mLocationRequest.setInterval(Constants.LOCATION_INTERVAL);
+        mLocationRequest.setFastestInterval(Constants.FASTEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
@@ -151,33 +140,38 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("onLocationChanged", "entered");
+        LogUtility.d("onLocationChanged", "entered");
 
-        mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
+        if(location == null)return;
+        if(location.getLatitude() >0 || location.getLatitude() >0) {
+            mLastLocation = location;
+            if (mCurrLocationMarker != null) {
+                mCurrLocationMarker.remove();
+            }
+
+            //Place current location marker
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            // move map camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+
+            LogUtility.d("onLocationChanged", String.format("mLatitude:%.3f mLongitude:%.3f", mLatitude, mLongitude));
+
+            //stop location updates
+
+            if (mGoogleApiClient != null) {
+                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+                LogUtility.d("onLocationChanged", "Removing Location Updates");
+            }
+            LogUtility.d("onLocationChanged", "Exit");
+
+            //call api to fetch nearby response
+            buildRetrofitAndGetResponse("restaurant");
         }
-
-        //Place current location marker
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-       // move map camera
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-
-        Log.d("onLocationChanged", String.format("latitude:%.3f longitude:%.3f", latitude, longitude));
-
-        //stop location updates
-        if (mGoogleApiClient != null) {
-            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            Log.d("onLocationChanged", "Removing Location Updates");
-        }
-        Log.d("onLocationChanged", "Exit");
-        //call api to fetch nearby response
-        buildRetrofitAndGetResponse("restaurant");
 
     }
 
@@ -186,47 +180,15 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
 
     }
 
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    public boolean checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Asking user if explanation is needed
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-                //Prompt the user once explanation has been shown
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-
-
-            } else {
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION);
-            }
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
+            case PermissionUtility.PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (PermissionUtility.verifyPermissions(grantResults)) {
 
                     // permission was granted. Do the
                     // contacts-related task you need to do.
@@ -248,51 +210,31 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
                 return;
             }
 
-            // other 'case' lines to check for other permissions this app might request.
-            // You can add here other case statements according to your requirement.
         }
     }
 
     private void buildRetrofitAndGetResponse(String type) {
 
-        String url = "https://maps.googleapis.com/maps/";
+        String url = NearByPlaceService.SERVICE_ENDPOINT;
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        NearByPlaceInterface service = retrofit.create(NearByPlaceInterface.class);
+        NearByPlaceService service = retrofit.create(NearByPlaceService.class);
 
-        Call<FetchNearByRestaurants> call = service.getNearbyPlaces(type, latitude + "," + longitude, PROXIMITY_RADIUS);
+        Call<FetchNearByRestaurants> call = service.getNearbyPlaces(type, mLatitude + "," + mLongitude, Constants.PROXIMITY_RADIUS);
 
         call.enqueue(new Callback<FetchNearByRestaurants>() {
             @Override
             public void onResponse(Call<FetchNearByRestaurants> call, Response<FetchNearByRestaurants> response) {
                 try {
                     mMap.clear();
-                    // This loop will go through all the results and add marker on each location.
-                    for (int i = 0; i < response.body().getResults().size(); i++) {
-                        Double lat = response.body().getResults().get(i).getGeometry().getLocation().getLat();
-                        Double lng = response.body().getResults().get(i).getGeometry().getLocation().getLng();
-                        String placeName = response.body().getResults().get(i).getName();
-                        String vicinity = response.body().getResults().get(i).getVicinity();
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        LatLng latLng = new LatLng(lat, lng);
-                        // Position of Marker on Map
-                        markerOptions.position(latLng);
-                        // Adding Title to the Marker
-                        markerOptions.title(placeName + " : " + vicinity);
-                        // Adding Marker to the Camera.
-                        Marker m = mMap.addMarker(markerOptions);
-                        // Adding colour to the marker
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                        // move map camera
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-                    }
+                    handleMarkerDisplay(response);
+
                 } catch (Exception e) {
-                    Log.d("onResponse", "There is an error");
+                    LogUtility.d("onResponse", "There is an error");
                     e.printStackTrace();
                 }
             }
@@ -304,5 +246,30 @@ public class NearByLocationActivity extends FragmentActivity implements OnMapRea
 
 
         });
+
+
+    }
+
+    private void handleMarkerDisplay(Response<FetchNearByRestaurants> response) {
+        // This loop will go through all the results and add marker on each location.
+        for (int i = 0; i < response.body().getResults().size(); i++) {
+            Double lat = response.body().getResults().get(i).getGeometry().getLocation().getLat();
+            Double lng = response.body().getResults().get(i).getGeometry().getLocation().getLng();
+            String placeName = response.body().getResults().get(i).getName();
+            String vicinity = response.body().getResults().get(i).getVicinity();
+            MarkerOptions markerOptions = new MarkerOptions();
+            LatLng latLng = new LatLng(lat, lng);
+            // Position of Marker on Map
+            markerOptions.position(latLng);
+            // Adding Title to the Marker
+            markerOptions.title(placeName + " : " + vicinity);
+            // Adding Marker to the Camera.
+            Marker m = mMap.addMarker(markerOptions);
+            // Adding colour to the marker
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            // move map camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        }
     }
 }

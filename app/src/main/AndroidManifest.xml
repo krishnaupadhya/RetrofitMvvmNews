@@ -29,7 +29,7 @@
 
             android:value="@string/google_maps_key"/>
 
-        <activity android:name=".auth.view.LoginActivity">
+        <activity android:name=".map.NearByLocationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
