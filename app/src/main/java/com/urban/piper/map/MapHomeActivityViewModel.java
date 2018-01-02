@@ -1,5 +1,8 @@
 package com.urban.piper.map;
 
+import android.databinding.Observable;
+import android.databinding.ObservableField;
+
 import com.urban.piper.app.Constants;
 import com.urban.piper.common.viewmodel.BaseViewModel;
 import com.urban.piper.model.FetchNearByRestaurants;
@@ -19,9 +22,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MapHomeActivityViewModel extends BaseViewModel {
 
     private final MapHomeListener mMapHomeActivityListener;
+    public ObservableField<Boolean> mProgressVisible;
 
     public MapHomeActivityViewModel(MapHomeListener maphomelistener) {
         mMapHomeActivityListener = maphomelistener;
+        mProgressVisible = new ObservableField<>(false);
     }
 
     public void buildRetrofitAndGetResponse(double latitude, double longitude) {
@@ -40,10 +45,11 @@ public class MapHomeActivityViewModel extends BaseViewModel {
             @Override
             public void onResponse(Call<FetchNearByRestaurants> call, Response<FetchNearByRestaurants> response) {
                 try {
-
+                    removeProgress();
                     mMapHomeActivityListener.onNearByResultFetched(response);
 
                 } catch (Exception e) {
+                    removeProgress();
                     LogUtility.d("onResponse", "There is an error");
                     e.printStackTrace();
                 }
@@ -56,5 +62,9 @@ public class MapHomeActivityViewModel extends BaseViewModel {
 
 
         });
+    }
+
+    public void removeProgress(){
+        mProgressVisible.set(false);
     }
 }

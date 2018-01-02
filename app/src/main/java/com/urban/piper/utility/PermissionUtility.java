@@ -2,7 +2,9 @@ package com.urban.piper.utility;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
@@ -58,5 +60,17 @@ public class PermissionUtility {
         } else {
             return true;
         }
+    }
+
+    public static boolean isVersionMarshmallowAndAbove() {
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
+    }
+
+    public static void requestAccessLocationPermission(Activity activity) {
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_LOCATION);
+    }
+
+    public static boolean checkAccessLocationPermission(Context context) {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }
