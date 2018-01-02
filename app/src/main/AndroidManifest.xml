@@ -40,7 +40,7 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".home.view.HomeActivity"
+            android:name=".map.MapHomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>

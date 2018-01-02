@@ -26,4 +26,6 @@ public class Constants {
     public static long LOCATION_INTERVAL = 1000;
     public static long FASTEST_INTERVAL = 1000;
     public static int PROXIMITY_RADIUS = 10000;
+
+    public static String SEARCH_KEY_RESTAURANT = "restaurant";
 }
