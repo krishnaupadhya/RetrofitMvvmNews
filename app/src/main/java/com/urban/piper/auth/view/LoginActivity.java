@@ -25,7 +25,7 @@ import com.urban.piper.auth.viewmodel.LoginActivityViewModel;
 import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.data.DataManager;
 import com.urban.piper.databinding.LoginActivityBinding;
-import com.urban.piper.home.view.HomeActivity;
+import com.urban.piper.home.view.FoodListActivity;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.utility.DialogUtility;
 import com.urban.piper.utility.NetworkUtility;
@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity implements LoginListener {
 
     public void openHomePage() {
 
-        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+        startActivity(new Intent(LoginActivity.this, FoodListActivity.class));
         finish();
 
     }

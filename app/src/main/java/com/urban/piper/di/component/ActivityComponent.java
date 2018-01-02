@@ -2,7 +2,7 @@ package com.urban.piper.di.component;
 
 import com.urban.piper.di.module.ActivityModule;
 import com.urban.piper.di.scope.PerActivity;
-import com.urban.piper.home.view.HomeActivity;
+import com.urban.piper.home.view.FoodListActivity;
 
 import dagger.Component;
 
@@ -14,6 +14,6 @@ import dagger.Component;
 @Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
 public interface ActivityComponent {
 
-    void inject(HomeActivity mainActivity);
+    void inject(FoodListActivity mainActivity);
 
 }

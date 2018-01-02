@@ -1,49 +1,36 @@
 package com.urban.piper.home.viewmodel;
 
-import android.app.Activity;
 import android.databinding.ObservableField;
-import android.util.Log;
 import android.view.View;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.urban.piper.app.Constants;
 import com.urban.piper.app.DatabaseController;
 import com.urban.piper.common.viewmodel.BaseViewModel;
-import com.urban.piper.home.listener.HomeListener;
+import com.urban.piper.home.listener.FoodListListener;
 import com.urban.piper.model.FoodInfo;
-import com.urban.piper.network.HackerNewsService;
-import com.urban.piper.network.ServiceFactory;
 import com.urban.piper.utility.LogUtility;
-import com.urban.piper.utility.NetworkUtility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-public class HomeActivityViewModel extends BaseViewModel {
+public class FoodListActivityViewModel extends BaseViewModel {
 
-    private String TAG = HomeActivityViewModel.class.getSimpleName();
-    private final HomeListener homeListener;
+    private String TAG = FoodListActivityViewModel.class.getSimpleName();
+    private final FoodListListener foodListListener;
     public ObservableField<Boolean> isProgressRingVisible;
     public ObservableField<Boolean> isFoodListListVisible;
     public ObservableField<String> totalPrice;
     public ObservableField<String> subTotal;
     public ObservableField<String> deliveryCharges;
 
-    public HomeActivityViewModel(HomeListener homeListener) {
+    public FoodListActivityViewModel(FoodListListener homeListener) {
         this.isProgressRingVisible = new ObservableField<>(false);
         this.isFoodListListVisible = new ObservableField<>(false);
         this.totalPrice = new ObservableField<>("₹ 0.0");
         this.subTotal = new ObservableField<>("₹ 0.0");
         this.deliveryCharges = new ObservableField<>("₹ 0.0");
-        this.homeListener = homeListener;
+        this.foodListListener = homeListener;
     }
 
     public void setSubTotal(String subTotal) {
@@ -73,7 +60,7 @@ public class HomeActivityViewModel extends BaseViewModel {
     }
 
     public void onProceedClick(View view) {
-        homeListener.onProceedToCheckoutClick();
+        foodListListener.onProceedToCheckoutClick();
     }
 
     public void onPlaceOrderClick(View view) {
@@ -236,7 +223,7 @@ public class HomeActivityViewModel extends BaseViewModel {
             }
         });
         setPriceDetails();
-        homeListener.onResetSuccess();
+        foodListListener.onResetSuccess();
 
     }
 

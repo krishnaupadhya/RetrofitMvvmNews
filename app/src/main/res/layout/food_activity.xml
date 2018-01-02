@@ -9,7 +9,7 @@
 
         <variable
             name="homeViewModel"
-            type="com.urban.piper.home.viewmodel.HomeActivityViewModel" />
+            type="com.urban.piper.home.viewmodel.FoodListActivityViewModel" />
     </data>
 
     <android.support.design.widget.CoordinatorLayout

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -18,12 +17,11 @@ import com.urban.piper.R;
 import com.urban.piper.app.Constants;
 import com.urban.piper.auth.view.LoginActivity;
 import com.urban.piper.common.view.BaseActivity;
-import com.urban.piper.databinding.HomeActivityBinding;
+import com.urban.piper.databinding.FoodActivityBinding;
 import com.urban.piper.event.FoodItemQtryChangeClickEvent;
 import com.urban.piper.home.adapters.FoodListAdapter;
-import com.urban.piper.home.listener.HomeListener;
-import com.urban.piper.home.viewmodel.HomeActivityViewModel;
-import com.urban.piper.home.viewmodel.NavigationHeaderViewModel;
+import com.urban.piper.home.listener.FoodListListener;
+import com.urban.piper.home.viewmodel.FoodListActivityViewModel;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.model.FoodInfo;
 import com.urban.piper.utility.DialogUtility;
@@ -39,15 +37,12 @@ import java.util.ArrayList;
  * Created by Krishna Upadhya on 9/9/2017.
  */
 
-public class HomeActivity extends BaseActivity implements HomeListener {
+public class FoodListActivity extends BaseActivity implements FoodListListener {
 
-    private HomeActivityViewModel homeViewModel;
+    private FoodListActivityViewModel foodListActivityViewModel;
     private FoodListAdapter adapter;
-    private HomeActivityBinding homeActivityBinding;
-    private ArrayList<FoodInfo> artliclesList;
-    private NavigationHeaderViewModel navigationHeaderViewModel;
-    private String TAG = HomeActivity.class.getSimpleName();
-
+    private FoodActivityBinding foodActivityBinding;
+    private ArrayList<FoodInfo> foodInfoArrayList;
     BottomSheetBehavior sheetBehavior;
     private String mPageTitle;
 
@@ -62,20 +57,9 @@ public class HomeActivity extends BaseActivity implements HomeListener {
 
     private void initView() {
         mPageTitle = getIntent().getStringExtra(Constants.KEY_HOTEL_NAME);
-        homeActivityBinding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                homeActivityBinding.swipeRefreshLayout.setRefreshing(false);
-                //  homeViewModel.getNewsList();
-            }
-        });
-        artliclesList = homeViewModel.fetchCachedData();
-        setupFoodListView(artliclesList);
-        sheetBehavior = BottomSheetBehavior.from(homeActivityBinding.bottomSheet);
-        /**
-         * bottom sheet state change listener
-         * we are changing button text when sheet changed state
-         * */
+        foodInfoArrayList = foodListActivityViewModel.fetchCachedData();
+        setupFoodListView(foodInfoArrayList);
+        sheetBehavior = BottomSheetBehavior.from(foodActivityBinding.bottomSheet);
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -109,13 +93,13 @@ public class HomeActivity extends BaseActivity implements HomeListener {
     }
 
     private void initBinding() {
-        homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity);
-        homeViewModel = new HomeActivityViewModel(this);
-        homeActivityBinding.setHomeViewModel(homeViewModel);
+        foodActivityBinding = DataBindingUtil.setContentView(this, R.layout.food_activity);
+        foodListActivityViewModel = new FoodListActivityViewModel(this);
+        foodActivityBinding.setHomeViewModel(foodListActivityViewModel);
     }
 
     private void initToolBar() {
-        setSupportActionBar(homeActivityBinding.appBarHome.toolbar);
+        setSupportActionBar(foodActivityBinding.appBarHome.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (!TextUtils.isEmpty(mPageTitle))
             getSupportActionBar().setTitle(mPageTitle);
@@ -133,18 +117,18 @@ public class HomeActivity extends BaseActivity implements HomeListener {
 
     private void setupFoodListView(ArrayList<FoodInfo> foodInfoArrayList) {
         if (foodInfoArrayList == null || (foodInfoArrayList != null && foodInfoArrayList.size() == 0)) {
-            homeViewModel.setIsFoodListListVisible(false);
+            foodListActivityViewModel.setIsFoodListListVisible(false);
         } else {
-            homeViewModel.setIsFoodListListVisible(true);
+            foodListActivityViewModel.setIsFoodListListVisible(true);
             if (adapter == null) {
                 adapter = new FoodListAdapter(foodInfoArrayList, false);
-                homeActivityBinding.listNews.setAdapter(adapter);
-                homeActivityBinding.listNews.setLayoutManager(new LinearLayoutManager(this));
-                homeActivityBinding.listNews.setItemAnimator(new DefaultItemAnimator());
+                foodActivityBinding.listNews.setAdapter(adapter);
+                foodActivityBinding.listNews.setLayoutManager(new LinearLayoutManager(this));
+                foodActivityBinding.listNews.setItemAnimator(new DefaultItemAnimator());
             } else {
                 adapter.updateNewsList(foodInfoArrayList);
             }
-            homeViewModel.setPriceDetails();
+            foodListActivityViewModel.setPriceDetails();
         }
     }
 
@@ -173,8 +157,8 @@ public class HomeActivity extends BaseActivity implements HomeListener {
     @Override
     public void onResetSuccess() {
         DialogUtility.showToastMessage(this, getString(R.string.order_success_msg), Toast.LENGTH_LONG);
-        artliclesList = homeViewModel.fetchCachedData();
-        setupFoodListView(artliclesList);
+        foodInfoArrayList = foodListActivityViewModel.fetchCachedData();
+        setupFoodListView(foodInfoArrayList);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
@@ -201,9 +185,9 @@ public class HomeActivity extends BaseActivity implements HomeListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewsClickEvent(FoodItemQtryChangeClickEvent event) {
         if (event != null) {
-            homeViewModel.onQtyChangedClick(event.getArticle(), event.getPosition(), event.isAddQty());
-            artliclesList = homeViewModel.fetchCachedData();
-            updateFoodListItem(artliclesList, event.getPosition());
+            foodListActivityViewModel.onQtyChangedClick(event.getArticle(), event.getPosition(), event.isAddQty());
+            foodInfoArrayList = foodListActivityViewModel.fetchCachedData();
+            updateFoodListItem(foodInfoArrayList, event.getPosition());
         }
     }
 
