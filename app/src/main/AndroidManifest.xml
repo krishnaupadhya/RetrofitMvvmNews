@@ -32,6 +32,13 @@
         <activity android:name=".map.NearByLocationActivity">
 
         </activity>
+        <activity android:name=".home.view.HomeActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity android:name=".auth.view.LoginActivity">
 
             <!-- <intent-filter> -->

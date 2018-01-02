@@ -32,19 +32,18 @@ public class HomeActivityViewModel extends BaseViewModel {
     private String TAG = HomeActivityViewModel.class.getSimpleName();
     private final HomeListener homeListener;
     public ObservableField<Boolean> isProgressRingVisible;
-    private Activity mContext;
     public ObservableField<Boolean> isFoodListListVisible;
     public ObservableField<String> totalPrice;
     public ObservableField<String> subTotal;
     public ObservableField<String> deliveryCharges;
 
-    public HomeActivityViewModel(HomeListener homeListener, Activity activity) {
+    public HomeActivityViewModel(HomeListener homeListener) {
         this.isProgressRingVisible = new ObservableField<>(false);
         this.isFoodListListVisible = new ObservableField<>(false);
-        totalPrice = new ObservableField<>("₹ 0.0");
-        subTotal = new ObservableField<>("₹ 0.0");
+        this.totalPrice = new ObservableField<>("₹ 0.0");
+        this.subTotal = new ObservableField<>("₹ 0.0");
+        this.deliveryCharges = new ObservableField<>("₹ 0.0");
         this.homeListener = homeListener;
-        this.mContext = activity;
     }
 
     public void setSubTotal(String subTotal) {
@@ -203,6 +202,7 @@ public class HomeActivityViewModel extends BaseViewModel {
         double total = price + 40;
         subTotal.set("₹" + price);
         totalPrice.set("₹" + total);
+        setDeliveryCharges("₹ 40");
     }
 
     public void onQtyChangedClick(FoodInfo foodItem, int position, boolean isAddQty) {

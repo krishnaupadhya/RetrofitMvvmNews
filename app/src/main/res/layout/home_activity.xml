@@ -174,7 +174,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="₹40.00"
+                            android:text="@{homeViewModel.deliveryCharges}"
                             android:textSize="14dp"
                             android:textStyle="bold"></TextView>
                     </LinearLayout>

@@ -22,6 +22,7 @@ public class Constants {
     public static final String TAB_TYPE = "tab_type";
     public static final String FIREBASE_CLOUD_URL = "gs://urbanpiper-16b2f.appspot.com";
     public static final String BACKGROUND_IMAGE = "background.jpg";
+    public static final String KEY_HOTEL_NAME = "key_hotel_name";
 
     public static long LOCATION_INTERVAL = 1000;
     public static long FASTEST_INTERVAL = 1000;

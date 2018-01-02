@@ -9,11 +9,13 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.urban.piper.R;
+import com.urban.piper.app.Constants;
 import com.urban.piper.auth.view.LoginActivity;
 import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.databinding.HomeActivityBinding;
@@ -47,6 +49,7 @@ public class HomeActivity extends BaseActivity implements HomeListener {
     private String TAG = HomeActivity.class.getSimpleName();
 
     BottomSheetBehavior sheetBehavior;
+    private String mPageTitle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class HomeActivity extends BaseActivity implements HomeListener {
     }
 
     private void initView() {
+        mPageTitle = getIntent().getStringExtra(Constants.KEY_HOTEL_NAME);
         homeActivityBinding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,13 +110,15 @@ public class HomeActivity extends BaseActivity implements HomeListener {
 
     private void initBinding() {
         homeActivityBinding = DataBindingUtil.setContentView(this, R.layout.home_activity);
-        homeViewModel = new HomeActivityViewModel(this, this);
+        homeViewModel = new HomeActivityViewModel(this);
         homeActivityBinding.setHomeViewModel(homeViewModel);
     }
 
     private void initToolBar() {
         setSupportActionBar(homeActivityBinding.appBarHome.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (!TextUtils.isEmpty(mPageTitle))
+            getSupportActionBar().setTitle(mPageTitle);
     }
 
 
