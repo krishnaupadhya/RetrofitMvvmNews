@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Krishna Upadhya on 9/6/2017.
  */
 
-public class ArticleInfo extends RealmObject {
+public class FoodInfo extends RealmObject {
 
     @PrimaryKey
     @SerializedName("id")
@@ -73,6 +73,10 @@ public class ArticleInfo extends RealmObject {
 
     public String getArticleId() {
         return articleId;
+    }
+
+    public void setArticleId(String id) {
+        this.articleId = id;
     }
 
 

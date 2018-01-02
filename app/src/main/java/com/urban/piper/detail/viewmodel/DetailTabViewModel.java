@@ -8,7 +8,7 @@ import com.urban.piper.app.Constants;
 import com.urban.piper.common.viewmodel.BaseViewModel;
 import com.urban.piper.home.listener.HomeListener;
 import com.urban.piper.model.ArticleData;
-import com.urban.piper.model.ArticleInfo;
+import com.urban.piper.model.FoodInfo;
 import com.urban.piper.network.HackerNewsService;
 import com.urban.piper.network.ServiceFactory;
 import com.urban.piper.utility.NetworkUtility;
@@ -111,7 +111,7 @@ public class DetailTabViewModel extends BaseViewModel {
         service.getNewsItem(newsId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ArticleInfo>() {
+                .subscribe(new Subscriber<FoodInfo>() {
                     @Override
                     public final void onCompleted() {
                         // do nothing
@@ -126,7 +126,7 @@ public class DetailTabViewModel extends BaseViewModel {
                     }
 
                     @Override
-                    public final void onNext(ArticleInfo response) {
+                    public final void onNext(FoodInfo response) {
                         handleCommentsResponse(response);
                         setProgressBarVisibility(View.GONE);
                     }
@@ -135,7 +135,7 @@ public class DetailTabViewModel extends BaseViewModel {
                 });
     }
 
-    private void handleCommentsResponse(ArticleInfo article) {
+    private void handleCommentsResponse(FoodInfo article) {
         if (homeListener != null)
             homeListener.onResultSuccess(article);
     }

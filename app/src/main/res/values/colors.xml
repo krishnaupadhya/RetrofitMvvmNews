@@ -17,7 +17,7 @@
     <color name="trolleygrey">#818181</color>
     <color name="light_range">#FFC9A5</color>
     <color name="item_bg">#EFEFEF</color>
-
+    <color name="divider_color">#cbc8c8</color>
 </resources>
 
 

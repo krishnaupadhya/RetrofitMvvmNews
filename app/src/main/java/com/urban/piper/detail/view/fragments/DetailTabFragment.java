@@ -20,9 +20,9 @@ import com.urban.piper.app.Constants;
 import com.urban.piper.common.view.BaseFragment;
 import com.urban.piper.databinding.DetailTabFragmentBinding;
 import com.urban.piper.detail.viewmodel.DetailTabViewModel;
-import com.urban.piper.home.adapters.NewsListAdapter;
+import com.urban.piper.home.adapters.FoodListAdapter;
 import com.urban.piper.home.listener.HomeListener;
-import com.urban.piper.model.ArticleInfo;
+import com.urban.piper.model.FoodInfo;
 
 import java.util.ArrayList;
 
@@ -37,8 +37,8 @@ public class DetailTabFragment extends BaseFragment implements HomeListener {
     private DetailTabViewModel detailTabViewModel;
     private String url;
     private String type;
-    private NewsListAdapter adapter;
-    private ArrayList<ArticleInfo> artliclesList;
+    private FoodListAdapter adapter;
+    private ArrayList<FoodInfo> artliclesList;
     private String articleId;
 
     public DetailTabFragment() {
@@ -83,13 +83,13 @@ public class DetailTabFragment extends BaseFragment implements HomeListener {
     }
 
 
-    private void setupListLanguagesView(ArrayList<ArticleInfo> artliclesList) {
+    private void setupListLanguagesView(ArrayList<FoodInfo> artliclesList) {
         if (artliclesList == null || (artliclesList != null && artliclesList.size() == 0)) {
             detailTabViewModel.setIsNewsListListVisible(false);
         } else {
             detailTabViewModel.setIsNewsListListVisible(true);
             if (adapter == null) {
-                adapter = new NewsListAdapter(artliclesList, true);
+                adapter = new FoodListAdapter(artliclesList, true);
                 detailTabFragmentBinding.listComments.setAdapter(adapter);
                 detailTabFragmentBinding.listComments.setLayoutManager(new LinearLayoutManager(getActivity()));
                 detailTabFragmentBinding.listComments.setItemAnimator(new DefaultItemAnimator());
@@ -103,7 +103,7 @@ public class DetailTabFragment extends BaseFragment implements HomeListener {
 
 
     @Override
-    public void onResultSuccess(ArticleInfo article) {
+    public void onResultSuccess(FoodInfo article) {
         if (article == null) return;
         if (artliclesList == null)
             artliclesList = new ArrayList<>();

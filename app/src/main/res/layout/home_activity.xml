@@ -12,7 +12,6 @@
             type="com.urban.piper.home.viewmodel.HomeActivityViewModel" />
     </data>
 
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
@@ -30,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize" />
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -42,10 +40,22 @@
                     android:layout_centerInParent="true"
                     android:gravity="center">
 
+                    <Button
+                        android:id="@+id/place_order_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/btn_40dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorPrimary"
+                        android:text="@string/place_order"
+                        android:textColor="@color/white"
+                        android:visibility="@{homeViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}" />
+
                     <android.support.v4.widget.SwipeRefreshLayout
+
                         android:id="@+id/swipe_refresh_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_above="@id/place_order_btn"
                         android:visibility="@{homeViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}">
 
                         <android.support.v7.widget.RecyclerView
@@ -54,6 +64,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent" />
                     </android.support.v4.widget.SwipeRefreshLayout>
+
 
                     <RelativeLayout
                         android:layout_width="match_parent"

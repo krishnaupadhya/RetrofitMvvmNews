@@ -1,37 +1,28 @@
-package com.urban.piper.home.viewmodel;
+package com.urban.piper.detail.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.ObservableField;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
-import android.view.View;
 
-import com.urban.piper.event.FoodItemQtryChangeClickEvent;
 import com.urban.piper.model.FoodInfo;
 import com.urban.piper.utility.DateTimeUtility;
 import com.urban.piper.utility.StringUtility;
 
-import org.greenrobot.eventbus.EventBus;
-
 /**
  * Created by Krishna Upadhya
  */
-public class ItemNewsViewModel extends BaseObservable {
+public class ItemCheckoutViewModel extends BaseObservable {
 
     private FoodInfo foodInfo;
     private int articlePosition;
-    private String TAG = ItemNewsViewModel.class.getName();
+    private String TAG = ItemCheckoutViewModel.class.getName();
     public ObservableField<Boolean> isComments;
-    public ObservableField<Boolean> isQtyVisible;
     public ObservableField<Integer> itemQuantity;
     public ObservableField<Double> itemTotalPrice;
 
-
-    public ItemNewsViewModel(FoodInfo languagesData, int position, boolean isComments) {
+    public ItemCheckoutViewModel(FoodInfo languagesData, int position, boolean isComments) {
         this.foodInfo = languagesData;
         this.isComments = new ObservableField<>(isComments);
-        this.isQtyVisible = new ObservableField<>(isComments);
         this.itemTotalPrice = new ObservableField<>();
         this.itemQuantity = new ObservableField<>();
         this.articlePosition = position;
@@ -65,10 +56,6 @@ public class ItemNewsViewModel extends BaseObservable {
 
     public String getQuantity() {
         return foodInfo.getQuantity() + "";
-    }
-
-    public boolean getIsQtyVisible() {
-        return (foodInfo.getQuantity() > 0 ? true : false);
     }
 
     public boolean getIsNonVegItem() {
@@ -111,18 +98,4 @@ public class ItemNewsViewModel extends BaseObservable {
         notifyChange();
     }
 
-    public void onItemRemoveClick(View view) {
-
-        EventBus.getDefault().post(new FoodItemQtryChangeClickEvent(foodInfo, false, articlePosition));
-    }
-
-    public void onItemAddClick(View view) {
-        EventBus.getDefault().post(new FoodItemQtryChangeClickEvent(foodInfo, true, articlePosition));
-    }
-
-    public Spanned stripHtml(String html) {
-
-        return Html.fromHtml(html);
-
-    }
 }

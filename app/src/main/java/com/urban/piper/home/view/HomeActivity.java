@@ -13,20 +13,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 
 import com.urban.piper.R;
-import com.urban.piper.app.Constants;
 import com.urban.piper.app.DatabaseController;
 import com.urban.piper.auth.view.LoginActivity;
 import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.databinding.HomeActivityBinding;
 import com.urban.piper.databinding.NavHeaderHomeBinding;
-import com.urban.piper.detail.view.activity.DetailsActivity;
-import com.urban.piper.event.NewsClickEvent;
-import com.urban.piper.home.adapters.NewsListAdapter;
+import com.urban.piper.event.FoodItemQtryChangeClickEvent;
+import com.urban.piper.home.adapters.FoodListAdapter;
 import com.urban.piper.home.listener.HomeListener;
 import com.urban.piper.home.viewmodel.HomeActivityViewModel;
 import com.urban.piper.home.viewmodel.NavigationHeaderViewModel;
 import com.urban.piper.manager.SessionManager;
-import com.urban.piper.model.ArticleInfo;
+import com.urban.piper.model.FoodInfo;
 import com.urban.piper.utility.DialogUtility;
 
 import org.greenrobot.eventbus.EventBus;
@@ -35,7 +33,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-import io.realm.RealmResults;
+import io.realm.Realm;
 
 
 /**
@@ -45,17 +43,17 @@ import io.realm.RealmResults;
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, HomeListener {
 
     private HomeActivityViewModel homeViewModel;
-    private NewsListAdapter adapter;
+    private FoodListAdapter adapter;
     private HomeActivityBinding homeActivityBinding;
-    private ArrayList<ArticleInfo> artliclesList;
+    private ArrayList<FoodInfo> artliclesList;
     private NavigationHeaderViewModel navigationHeaderViewModel;
+    private String TAG = HomeActivity.class.getSimpleName();
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
-        fetchCachedData();
         initToolBar();
         initView();
         initDrawerLayout();
@@ -71,84 +69,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 //  homeViewModel.getNewsList();
             }
         });
-    }
-
-    private void fetchCachedData() {
-        RealmResults<ArticleInfo> cachedArticles = DatabaseController.getInstance().getArticlesFromDb();
-        if (cachedArticles != null && cachedArticles.size() > 0) {
-            if (artliclesList == null)
-                artliclesList = new ArrayList<>();
-            artliclesList.addAll(cachedArticles);
-            setupListLanguagesView(artliclesList);
-        } else {
-            artliclesList = new ArrayList<>();
-            ArticleInfo info = new ArticleInfo();
-            info.setTitle("Schezwan Fried Rice");
-            info.setImageUrl("https://i.ytimg.com/vi/OUhyJPJlfS8/maxresdefault.jpg");
-            info.setPrice(105);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Spatchcock Teriyaki Chicken with Quinoa Brown Rice");
-            info.setImageUrl("https://www.holleygrainger.com/wp-content/uploads/2016/10/One-Pan-Spatchcock-Chicken-and-Veggies-22.jpg");
-            info.setPrice(230);
-            info.setQuantity(0);
-            info.setNonVeg(true);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Jaipuri Kofta");
-            info.setImageUrl("http://www.11flowers.in/restaurant/wp-content/uploads/2017/11/jaipuri-veg-kofta-300x300.jpg");
-            info.setPrice(110);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Cheesy Cajun Chicken Burger");
-            info.setImageUrl("https://www.bbcgoodfood.com/sites/default/files/styles/carousel_small/public/recipe_images/cajun.jpg?itok=sYUO0-bd");
-            info.setPrice(105);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Schezwan Fried Rice");
-            info.setImageUrl("https://i.ytimg.com/vi/OUhyJPJlfS8/maxresdefault.jpg");
-            info.setPrice(105);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Spatchcock Teriyaki Chicken with Quinoa Brown Rice");
-            info.setImageUrl("https://www.holleygrainger.com/wp-content/uploads/2016/10/One-Pan-Spatchcock-Chicken-and-Veggies-22.jpg");
-            info.setPrice(230);
-            info.setQuantity(0);
-            info.setNonVeg(true);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Jaipuri Kofta");
-            info.setImageUrl("http://www.11flowers.in/restaurant/wp-content/uploads/2017/11/jaipuri-veg-kofta-300x300.jpg");
-            info.setPrice(110);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            info = new ArticleInfo();
-            info.setTitle("Cheesy Cajun Chicken Burger");
-            info.setImageUrl("https://www.bbcgoodfood.com/sites/default/files/styles/carousel_small/public/recipe_images/cajun.jpg?itok=sYUO0-bd");
-            info.setPrice(105);
-            info.setQuantity(0);
-            info.setNonVeg(false);
-            artliclesList.add(info);
-
-            setupListLanguagesView(artliclesList);
-
-        }
+        artliclesList = homeViewModel.fetchCachedData();
+        setupListLanguagesView(artliclesList);
     }
 
     @Override
@@ -198,13 +120,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-    private void setupListLanguagesView(ArrayList<ArticleInfo> artliclesList) {
+    private void setupListLanguagesView(ArrayList<FoodInfo> artliclesList) {
         if (artliclesList == null || (artliclesList != null && artliclesList.size() == 0)) {
             homeViewModel.setIsNewsListListVisible(false);
         } else {
             homeViewModel.setIsNewsListListVisible(true);
             if (adapter == null) {
-                adapter = new NewsListAdapter(artliclesList, false);
+                adapter = new FoodListAdapter(artliclesList, false);
                 homeActivityBinding.listNews.setAdapter(adapter);
                 homeActivityBinding.listNews.setLayoutManager(new LinearLayoutManager(this));
                 homeActivityBinding.listNews.setItemAnimator(new DefaultItemAnimator());
@@ -216,7 +138,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     @Override
-    public void onResultSuccess(ArticleInfo article) {
+    public void onResultSuccess(FoodInfo article) {
         if (article == null) return;
         if (artliclesList == null)
             artliclesList = new ArrayList<>();
@@ -258,11 +180,31 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onNewsClickEvent(NewsClickEvent event) {
+    public void onNewsClickEvent(FoodItemQtryChangeClickEvent event) {
         if (event != null) {
-            Intent intent = new Intent(this, DetailsActivity.class);
-            intent.putExtra(Constants.KEY_INTENT_NEWS_POSITION, event.getArticle().getArticleId());
-            startActivity(intent);
+
+            DatabaseController.getInstance().getRealm().executeTransaction(new Realm.Transaction() { // must be in transaction for this to work
+                @Override
+                public void execute(Realm realm) {
+                    // increment index
+                    FoodInfo foodItem = event.getArticle();
+                    if (event.isAddQty()) {
+                        foodItem.setQuantity(foodItem.getQuantity() + 1);
+                    } else if (event.getArticle().getQuantity() > 0) {
+                        foodItem.setQuantity(foodItem.getQuantity() - 1);
+                    }
+                    DatabaseController.getInstance().saveRealmObject(foodItem);
+                    artliclesList = homeViewModel.fetchCachedData();
+                    updateFoodListItem(artliclesList, event.getPosition());
+                }
+            });
+
+        }
+    }
+
+    private void updateFoodListItem(ArrayList<FoodInfo> artliclesList, int position) {
+        if (adapter != null) {
+            adapter.updateNewsListItem(artliclesList, position);
         }
     }
 

@@ -30,19 +30,25 @@
             android:value="@string/google_maps_key"/>
 
         <activity android:name=".map.NearByLocationActivity">
+
+        </activity>
+        <activity android:name=".auth.view.LoginActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".home.view.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".home.view.HomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-
-
         <activity
             android:name=".detail.view.activity.DetailsActivity"
             android:screenOrientation="portrait"
@@ -68,6 +74,7 @@
                 <action android:name="com.hangout.received" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

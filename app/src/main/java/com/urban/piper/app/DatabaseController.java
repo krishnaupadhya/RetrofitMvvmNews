@@ -5,12 +5,11 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.Fragment;
 
-import com.urban.piper.model.ArticleInfo;
+import com.urban.piper.model.FoodInfo;
 
 import java.util.Hashtable;
 
 import io.realm.Realm;
-import io.realm.RealmList;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
@@ -69,15 +68,22 @@ public class DatabaseController {
     }
 
 
-    public RealmResults<ArticleInfo> getArticlesFromDb() {
-        RealmResults<ArticleInfo> articlesList = realm.where(ArticleInfo.class).findAll();
+    public RealmResults<FoodInfo> getArticlesFromDb() {
+        RealmResults<FoodInfo> articlesList = realm.where(FoodInfo.class).findAll();
         return articlesList;
     }
 
-    public ArticleInfo getArticleById(String id) {
-        ArticleInfo article = realm.where(ArticleInfo.class).equalTo("articleId", id).findFirst();
+    public FoodInfo getArticleById(String id) {
+        FoodInfo items = realm.where(FoodInfo.class).equalTo("articleId", id).findFirst();
 
-        return article;
+        return items;
+    }
+
+
+    public RealmResults<FoodInfo> getArticleByCheckout( ) {
+        RealmResults<FoodInfo> foodItems = realm.where(FoodInfo.class).greaterThan("quantity", 0).findAll();
+
+        return foodItems;
     }
 
 
@@ -85,5 +91,12 @@ public class DatabaseController {
         if (instance != null) {
             instance = null;
         }
+    }
+
+
+    public void saveRealmObject(FoodInfo realmObject) {
+        //realm.beginTransaction();
+        realm.copyToRealmOrUpdate(realmObject);
+        //realm.commitTransaction();
     }
 }

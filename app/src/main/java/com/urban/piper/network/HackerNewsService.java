@@ -2,16 +2,10 @@ package com.urban.piper.network;
 
 import com.google.gson.JsonArray;
 import com.urban.piper.model.ArticleData;
-import com.urban.piper.model.ArticleInfo;
-import com.urban.piper.model.NotificationModel;
+import com.urban.piper.model.FoodInfo;
 
-import java.util.HashMap;
-
-import retrofit.http.Body;
 import retrofit.http.GET;
-import retrofit.http.POST;
 import retrofit.http.Path;
-import retrofit2.http.HeaderMap;
 import rx.Observable;
 
 /**
@@ -25,7 +19,7 @@ public interface HackerNewsService {
     Observable<JsonArray> getTopStoriesNewsId();
 
     @GET("/item/{id}?print=pretty")
-    Observable<ArticleInfo> getNewsItem(@Path("id") String id);
+    Observable<FoodInfo> getNewsItem(@Path("id") String id);
 
     @GET("/item/{id}?print=pretty")
     Observable<ArticleData> getArticleItem(@Path("id") String id);
