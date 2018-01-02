@@ -32,14 +32,19 @@
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/mobile"
-                android:gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+            <RelativeLayout
+                android:layout_width="@dimen/dimen_100dp"
+                android:layout_height="@dimen/dimen_100dp"
+                android:layout_centerInParent="true"
+                android:background="@color/colorAccent">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/logo_white" />
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 

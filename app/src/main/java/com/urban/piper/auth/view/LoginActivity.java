@@ -26,7 +26,6 @@ import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.data.DataManager;
 import com.urban.piper.databinding.LoginActivityBinding;
 import com.urban.piper.home.view.FoodListActivity;
-import com.urban.piper.manager.SessionManager;
 import com.urban.piper.utility.DialogUtility;
 import com.urban.piper.utility.NetworkUtility;
 
@@ -51,8 +50,6 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
-       //
-        // getActivityComponent().inject(this);
     }
 
     private void initBinding() {
@@ -80,9 +77,9 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     }
 
     private void initLogin() {
-        if (SessionManager.isUserLoggedIn()) {
+        if (mDataManager.isUserLoggedIn()) {
             openHomePage();
-        }else{
+        } else {
             loginViewModel.setIsProgressRingVisible(false);
         }
     }
@@ -106,10 +103,9 @@ public class LoginActivity extends BaseActivity implements LoginListener {
                             String accessToken = GoogleAuthUtil.getToken(getApplicationContext(), account.getAccount(), scope, new Bundle());
                             Log.d(TAG, "accessToken:" + accessToken);
                             if (!TextUtils.isEmpty(accessToken)) {
-                                SessionManager.setEmail(account.getEmail());
-                                SessionManager.setUserName(account.getDisplayName());
-                                SessionManager.setProfileImageUrl(account.getPhotoUrl().toString());
-                                SessionManager.setSessionToken(accessToken);
+                                mDataManager.setEmail(account.getEmail());
+                                mDataManager.setUserName(account.getDisplayName());
+                                mDataManager.setProfileImageUrl(account.getPhotoUrl().toString());
                                 mDataManager.saveAccessToken(accessToken);
                             }
                             runOnUiThread(new Runnable() {

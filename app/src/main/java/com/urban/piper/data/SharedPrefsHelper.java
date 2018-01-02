@@ -5,14 +5,15 @@ import android.content.SharedPreferences;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-/**
- * Created by janisharali on 25/12/16.
- */
+
 
 @Singleton
 public class SharedPrefsHelper {
 
     public static String PREF_KEY_ACCESS_TOKEN = "access-token";
+    public static final String PREF_KEY_SESSION_NICK_NAME = "pref_key_session_nick_name";
+    public static final String PREF_KEY_EMAIL = "pref_key_email";
+    public static final String PREF_KEY_PROFILE_IMAGE_URL = "pref_key_profile_image_url";
 
     private SharedPreferences mSharedPreferences;
 

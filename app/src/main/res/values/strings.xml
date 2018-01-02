@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hacker News</string>
+    <string name="app_name">Food Shop</string>
     <string name="network_error_alert_message">Please check your internet connection and try again.</string>
     <string name="please_wait">please wait</string>
     <string name="signing_in">signing in..</string>

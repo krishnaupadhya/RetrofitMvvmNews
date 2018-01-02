@@ -2,6 +2,7 @@ package com.urban.piper.home.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -101,6 +102,9 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
     private void initToolBar() {
         setSupportActionBar(foodActivityBinding.appBarHome.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            foodActivityBinding.appBarHome.toolbar.setTitleTextColor(getColor(R.color.colorAccent));
+        }
         if (!TextUtils.isEmpty(mPageTitle))
             getSupportActionBar().setTitle(mPageTitle);
     }
