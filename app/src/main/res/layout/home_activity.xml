@@ -12,112 +12,221 @@
             type="com.urban.piper.home.viewmodel.HomeActivityViewModel" />
     </data>
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <android.support.design.widget.CoordinatorLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        tools:openDrawer="start">
+        android:background="#efefef">
+
+        <include
+            android:id="@+id/app_bar_home"
+            layout="@layout/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_home"
+            android:layout_marginTop="?attr/actionBarSize"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <include
-                android:id="@+id/app_bar_home"
-                layout="@layout/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/app_bar_home">
+                android:layout_centerInParent="true"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:id="@+id/proceed_checkout_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/divider_color"
+                    android:padding="@dimen/dimen_4dp"
+                    android:visibility="@{homeViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rounded_corners"
+                        android:onClick="@{homeViewModel::onProceedClick}"
+                        android:text="@string/proceed_to_checkout"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_refresh_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/proceed_checkout_btn"
+                    android:visibility="@{homeViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list_news"
+                        style="@style/HNews.List"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </android.support.v4.widget.SwipeRefreshLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:gravity="center">
+                    android:visibility="@{homeViewModel.isFoodListListVisible ?View.GONE:View.VISIBLE}">
 
-                    <Button
-                        android:id="@+id/place_order_btn"
+                    <include
+                        layout="@layout/no_contents_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/btn_40dp"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/colorPrimary"
-                        android:text="@string/place_order"
-                        android:textColor="@color/white"
-                        android:visibility="@{homeViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}" />
-
-                    <android.support.v4.widget.SwipeRefreshLayout
-
-                        android:id="@+id/swipe_refresh_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@id/place_order_btn"
-                        android:visibility="@{homeViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/list_news"
-                            style="@style/HNews.List"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerInParent="true"
-                        android:visibility="@{homeViewModel.isNewsListListVisible ?View.GONE:View.VISIBLE}">
-
-                        <include
-                            layout="@layout/no_contents_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </RelativeLayout>
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clickable="true"
-                    android:visibility="@{homeViewModel.isProgressRingVisible ? View.VISIBLE:View.GONE}">
-
-                    <ProgressBar
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:progressDrawable="@drawable/progress_bar"
-                        android:theme="@style/AppTheme.OrangeAccent" />
+                        android:layout_height="match_parent" />
                 </RelativeLayout>
             </RelativeLayout>
+            <!-- Adding bottom sheet after main content -->
 
         </RelativeLayout>
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/activity_home_drawer">
+        <RelativeLayout
+            android:id="@+id/bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:background="#8Cffffff"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-            <android.support.v7.widget.AppCompatTextView
+            <RelativeLayout
+                android:id="@+id/place_order_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_alignParentBottom="true"
+                android:background="@color/divider_color"
+                android:padding="@dimen/dimen_4dp">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rounded_corners"
+                    android:onClick="@{homeViewModel::onPlaceOrderClick}"
+                    android:text="@string/place_order"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/check_out_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center_horizontal"
-                android:padding="10dp"
-                android:text="@string/offered_by_hn"
-                android:textColor="@color/trolleygrey"
-                android:textSize="12sp" />
-        </android.support.design.widget.NavigationView>
+                android:layout_above="@id/place_order_btn"
+                android:background="@color/white"
+                android:padding="@dimen/margin_10dp">
 
-    </android.support.v4.widget.DrawerLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@string/sub_total"
+                            android:textColor="#444"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{homeViewModel.subTotal}"
+                            android:textSize="15dp"
+                            android:textStyle="bold"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@string/delivery_charges"
+                            android:textColor="#444"
+                            android:textSize="14dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="₹40.00"
+                            android:textSize="14dp"
+                            android:textStyle="bold"></TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@string/total_price"
+                            android:textColor="#444"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="@{homeViewModel.totalPrice}"
+                            android:textSize="16dp"
+                            android:textStyle="bold"></TextView>
+                    </LinearLayout>
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:text="@string/delivery_address"
+                        android:textColor="#444"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 
 </layout>

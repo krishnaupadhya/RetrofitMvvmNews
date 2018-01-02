@@ -79,6 +79,12 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:2.8"
     provided 'javax.annotation:jsr250-api:1.0'
     compile 'javax.inject:javax.inject:1'
+
+    // butter knife
+    compile 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+
 }
 // Add to the bottom of the file
 apply plugin: 'com.google.gms.google-services'

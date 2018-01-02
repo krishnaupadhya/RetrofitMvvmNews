@@ -136,8 +136,7 @@ public class DetailTabViewModel extends BaseViewModel {
     }
 
     private void handleCommentsResponse(FoodInfo article) {
-        if (homeListener != null)
-            homeListener.onResultSuccess(article);
+
     }
 
     private void handleArticleItem(ArticleData article) {

@@ -85,7 +85,7 @@ public class DetailsActivity extends BaseActivity {
     }
 
     private void initToolBar() {
-        setSupportActionBar(detailActivityBinding.toolbar);
+        setSupportActionBar(detailActivityBinding.appBarCart.toolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

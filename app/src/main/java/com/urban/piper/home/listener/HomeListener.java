@@ -7,6 +7,10 @@ import com.urban.piper.model.FoodInfo;
  */
 
 public interface HomeListener {
-    void onResultSuccess(FoodInfo articles);
+
+
+    void onProceedToCheckoutClick();
+
+    void onResetSuccess();
 
 }

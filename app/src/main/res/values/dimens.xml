@@ -17,5 +17,8 @@
     <dimen name="card_content_padding">4dp</dimen>
     <dimen name="item_content_padding">8dp</dimen>
     <dimen name="dimen_30dp">30dp</dimen>
+    <dimen name="dimen_2dp">2dp</dimen>
+    <dimen name="dimen_44">44dp</dimen>
+    <dimen name="dimen_4dp">4dp</dimen>
 </resources>
 

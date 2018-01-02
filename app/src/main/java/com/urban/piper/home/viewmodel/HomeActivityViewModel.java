@@ -3,6 +3,7 @@ package com.urban.piper.home.viewmodel;
 import android.app.Activity;
 import android.databinding.ObservableField;
 import android.util.Log;
+import android.view.View;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,133 +27,58 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by Krishna Upadhya on 9/6/2017.
- */
-
 public class HomeActivityViewModel extends BaseViewModel {
+
+    private String TAG = HomeActivityViewModel.class.getSimpleName();
     private final HomeListener homeListener;
     public ObservableField<Boolean> isProgressRingVisible;
-    private String TAG = HomeActivityViewModel.class.getSimpleName();
     private Activity mContext;
-    public ObservableField<Boolean> isNewsListListVisible;
+    public ObservableField<Boolean> isFoodListListVisible;
+    public ObservableField<String> totalPrice;
+    public ObservableField<String> subTotal;
+    public ObservableField<String> deliveryCharges;
 
     public HomeActivityViewModel(HomeListener homeListener, Activity activity) {
         this.isProgressRingVisible = new ObservableField<>(false);
+        this.isFoodListListVisible = new ObservableField<>(false);
+        totalPrice = new ObservableField<>("₹ 0.0");
+        subTotal = new ObservableField<>("₹ 0.0");
         this.homeListener = homeListener;
         this.mContext = activity;
-        this.isNewsListListVisible = new ObservableField<>(false);
-        //getNewsList();
     }
 
-    public void setIsNewsListListVisible(Boolean isNewsListListVisible) {
-        this.isNewsListListVisible.set(isNewsListListVisible);
+    public void setSubTotal(String subTotal) {
+        if (this.subTotal == null)
+            this.subTotal = new ObservableField<>("₹ 0.0");
+        this.subTotal.set(subTotal);
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        if (this.totalPrice == null)
+            this.totalPrice = new ObservableField<>("₹ 0.0");
+        this.totalPrice.set(totalPrice);
+    }
+
+    public void setDeliveryCharges(String deliveryCharges) {
+        if (this.deliveryCharges == null)
+            this.deliveryCharges = new ObservableField<>("₹ 0.0");
+        this.deliveryCharges.set(deliveryCharges);
+    }
+
+    public void setIsFoodListListVisible(Boolean isFoodListListVisible) {
+        this.isFoodListListVisible.set(isFoodListListVisible);
     }
 
     public void setIsProgressRingVisible(Boolean isProgressRingVisible) {
         this.isProgressRingVisible.set(isProgressRingVisible);
     }
 
-    public void getNewsList() {
-
-        if (NetworkUtility.isNetworkAvailable()) {
-            setIsProgressRingVisible(true);
-        } else {
-            NetworkUtility.showNetworkError(getContext());
-            return;
-        }
-
-        HackerNewsService service = ServiceFactory.createRetrofitService(HackerNewsService.class, HackerNewsService.SERVICE_ENDPOINT);
-        service.getTopStoriesNewsId()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<JsonArray>() {
-                    @Override
-                    public final void onCompleted() {
-                        // do nothing
-                        Log.e(TAG, "onCompleted");
-                        setIsProgressRingVisible(false);
-                    }
-
-                    @Override
-                    public final void onError(Throwable e) {
-                        Log.e(TAG, e.getMessage());
-                        setIsProgressRingVisible(false);
-                    }
-
-                    @Override
-                    public final void onNext(JsonArray response) {
-
-                        handleIdResponse(response);
-                        setIsProgressRingVisible(false);
-                    }
-                });
-
-
+    public void onProceedClick(View view) {
+        homeListener.onProceedToCheckoutClick();
     }
 
-    private void handleIdResponse(JsonArray response) {
-        List<String> newsIdList = new ArrayList<>();
-        if (response != null) {
-            for (JsonElement id : response) {
-                newsIdList.add(id.getAsString());
-                if (newsIdList.size() == 20)
-                    break;
-            }
-        }
-        if (newsIdList != null && newsIdList.size() > 0) {
-            getAllStories(newsIdList);
-        }
-        LogUtility.d(TAG, newsIdList.size() + "");
-    }
-
-    private void getAllStories(List<String> newsIdList) {
-        if (NetworkUtility.isNetworkAvailable()) {
-            setIsProgressRingVisible(true);
-        } else {
-            NetworkUtility.showNetworkError(getContext());
-            return;
-        }
-        HackerNewsService service = ServiceFactory.createRetrofitService(HackerNewsService.class, HackerNewsService.SERVICE_ENDPOINT);
-        for (String id : newsIdList) {
-            String newsId = id + ".json";
-            service.getNewsItem(newsId)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<FoodInfo>() {
-                        @Override
-                        public final void onCompleted() {
-                            // do nothing
-                            Log.e(TAG, "onCompleted");
-                        }
-
-                        @Override
-                        public final void onError(Throwable e) {
-                            Log.e(TAG, e.getMessage());
-                        }
-
-                        @Override
-                        public final void onNext(FoodInfo response) {
-                            handleArticleItem(response);
-                        }
-
-
-                    });
-        }
-
-        setIsProgressRingVisible(false);
-
-    }
-
-    private void handleArticleItem(FoodInfo articles) {
-        FoodInfo article = DatabaseController.getInstance().getArticleById(articles.getArticleId());
-        if (article == null) {
-            if (homeListener != null)
-                homeListener.onResultSuccess(articles);
-            saveToRealmDb(articles);
-        } else {
-            LogUtility.d(TAG, "News already exists " + article.getTitle());
-        }
+    public void onPlaceOrderClick(View view) {
+        resetFoodItems();
     }
 
     public ArrayList<FoodInfo> fetchCachedData() {
@@ -260,12 +186,58 @@ public class HomeActivityViewModel extends BaseViewModel {
         });
     }
 
+    public void setPriceDetails() {
+        RealmResults<FoodInfo> priceList = DatabaseController.getInstance().getArticleByCheckout();
+        if (priceList == null || priceList.size() == 0) {
 
-    private HashMap getHeaders() {
-        HashMap<String, Object> header = new HashMap<>();
-        header.put("Content-Type", "application/json");
-        header.put("Authorization", "key=" + Constants.SERVER_KEY);
-        return header;
+            setSubTotal("₹0.0");
+            setDeliveryCharges("₹0.0");
+            setTotalPrice("₹0.0");
+            return;
+        }
+        double price = 0.0;
+        for (FoodInfo info : priceList
+                ) {
+            price = price + (info.getQuantity() * info.getPrice());
+        }
+        double total = price + 40;
+        subTotal.set("₹" + price);
+        totalPrice.set("₹" + total);
+    }
+
+    public void onQtyChangedClick(FoodInfo foodItem, int position, boolean isAddQty) {
+        DatabaseController.getInstance().getRealm().executeTransaction(new Realm.Transaction() { // must be in transaction for this to work
+            @Override
+            public void execute(Realm realm) {
+                // increment index
+                if (isAddQty) {
+                    foodItem.setQuantity(foodItem.getQuantity() + 1);
+                    setPriceDetails();
+                } else if (foodItem.getQuantity() > 0) {
+                    foodItem.setQuantity(foodItem.getQuantity() - 1);
+                }
+                DatabaseController.getInstance().saveRealmObject(foodItem);
+
+            }
+        });
+    }
+
+    public void resetFoodItems() {
+        DatabaseController.getInstance().getRealm().executeTransaction(new Realm.Transaction() { // must be in transaction for this to work
+            @Override
+            public void execute(Realm realm) {
+
+                ArrayList<FoodInfo> foodList = fetchCachedData();
+                if (foodList == null || foodList.size() == 0) return;
+                for (FoodInfo info : foodList
+                        ) {
+                    info.setQuantity(0);
+                }
+            }
+        });
+        setPriceDetails();
+        homeListener.onResetSuccess();
+
     }
 
 

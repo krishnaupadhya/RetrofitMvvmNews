@@ -32,13 +32,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
-                    android:visibility="@{detailTabViewModel.isNewsListListVisible ?View.VISIBLE:View.GONE}" />
+                     />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
-                    android:visibility="@{detailTabViewModel.isNewsListListVisible ?View.GONE:View.VISIBLE}">
+                   >
 
                     <include
                         layout="@layout/no_contents_layout"

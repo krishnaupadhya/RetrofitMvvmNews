@@ -103,12 +103,13 @@ public class DetailTabFragment extends BaseFragment implements HomeListener {
 
 
     @Override
-    public void onResultSuccess(FoodInfo article) {
-        if (article == null) return;
-        if (artliclesList == null)
-            artliclesList = new ArrayList<>();
-        artliclesList.add(article);
-        setupListLanguagesView(artliclesList);
+    public void onProceedToCheckoutClick() {
+
+    }
+
+    @Override
+    public void onResetSuccess() {
+
     }
 
 
