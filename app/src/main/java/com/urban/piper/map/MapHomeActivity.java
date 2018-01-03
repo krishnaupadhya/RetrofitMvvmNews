@@ -1,17 +1,11 @@
 package com.urban.piper.map;
 
-import android.Manifest;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,48 +14,28 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.urban.piper.R;
 import com.urban.piper.app.Constants;
 import com.urban.piper.databinding.MapHomeActivityBinding;
 import com.urban.piper.databinding.NavHeaderHomeBinding;
 import com.urban.piper.home.viewmodel.NavigationHeaderViewModel;
 import com.urban.piper.manager.SessionManager;
-import com.urban.piper.model.FetchNearByRestaurants;
-import com.urban.piper.model.Result;
-import com.urban.piper.utility.CJRHotelLocationProvider;
 import com.urban.piper.utility.DialogUtility;
 import com.google.android.gms.location.LocationListener;
 import com.urban.piper.utility.LogUtility;
 import com.urban.piper.utility.NetworkUtility;
 import com.urban.piper.utility.PermissionUtility;
 
-import java.util.List;
-
-import retrofit2.Response;
-import rx.Observable;
-
-import static java.security.AccessController.getContext;
-
 /**
  * Created by Supriya A on 1/2/2018.
  */
 
-public class MapHomeActivity extends AppCompatActivity implements MapHomeListener, NavigationView.OnNavigationItemSelectedListener, OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MapHomeActivity extends AppCompatActivity implements MapHomeListener, NavigationView.OnNavigationItemSelectedListener,
+       GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
     //Binding Fields
@@ -70,12 +44,10 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     private MapHomeActivityViewModel mHomeViewModel;
 
     //Map Fields
-    private GoogleMap mMap;
     private double mLatitude;
     private double mLongitude;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
-    private Marker mCurrLocationMarker;
     private LocationRequest mLocationRequest;
 
 
@@ -86,7 +58,6 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         buildGoogleApiClient();
         initBinding();
         initToolBar();
-        initMapView();
         initDrawerLayout();
         initNavigationView();
     }
@@ -110,17 +81,24 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         if (PermissionUtility.isVersionMarshmallowAndAbove() && !PermissionUtility.checkLocationPermission(this)) {
             return;
         }
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
+            mGoogleApiClient.disconnect();
+        }
     }
 
     private void initBinding() {
         mMapHomeActivityBinding = DataBindingUtil.setContentView(this, R.layout.map_home_activity);
-        mHomeViewModel = new MapHomeActivityViewModel(this);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+
+        mHomeViewModel = new MapHomeActivityViewModel(this,mapFragment);
         mMapHomeActivityBinding.setMapHomeViewModel(mHomeViewModel);
     }
 
@@ -128,12 +106,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         setSupportActionBar(mMapHomeActivityBinding.appBarHome.toolbar);
     }
 
-    private void initMapView() {
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
+
 
     private void initDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -156,41 +129,23 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         mMapHomeActivityBinding.drawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    public void onNearByResultFetched(Response<FetchNearByRestaurants> response) {
-        mMap.clear();
-        // This loop will go through all the results and add marker on each location.
-        List<Result> resultList = response.body().getResults();
-        /*if (resultList != null && resultList.size() > 0) {
-            for (int i = 0; i < resultList.size(); i++) {
-                Double lat = resultList.get(i).getGeometry().getLocation().getLat();
-                Double lng = resultList.get(i).getGeometry().getLocation().getLng();
-                String placeName = resultList.get(i).getName();
-                String vicinity = resultList.get(i).getVicinity();
-                MarkerOptions markerOptions = new MarkerOptions();
-                LatLng latLng = new LatLng(lat, lng);
-                // Position of Marker on Map
-                markerOptions.position(latLng);
-                // Adding Title to the Marker
-                markerOptions.title(placeName + " : " + vicinity);
-                // Adding Marker to the Camera.
-                Marker m = mMap.addMarker(markerOptions);
-                // Adding colour to the marker
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                // move map camera
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
-            }
-        }*/
 
-        Observable.from(resultList).forEach(placeMap -> {
-            MarkerOptions options = new MarkerOptions()
-                    .position(new LatLng(placeMap.getGeometry().getLocation().getLat(), placeMap.getGeometry().getLocation().getLng()))
-                    .title(placeMap.getName() + ":" + placeMap.getVicinity())
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-            mMap.addMarker(options);
-            //markers.put(placeMap.nameRes, marker);
-        });
+
+    @Override
+    public void checkPermissionOnMapReady() {
+        if (PermissionUtility.isVersionMarshmallowAndAbove()) {
+            if (PermissionUtility.checkAccessLocationPermission(this)) {
+               if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
+            }
+        } else {
+            if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
+        }
+    }
+
+    @Override
+    public void onMarkerClick(String title) {
+        //fetch the hotel details
+
     }
 
     @Override
@@ -237,9 +192,6 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         if (location == null) return;
         if (location.getLatitude() > 0 || location.getLatitude() > 0) {
             mLastLocation = location;
-            if (mCurrLocationMarker != null) {
-                mCurrLocationMarker.remove();
-            }
 
             //Place current location marker
             mLatitude = location.getLatitude();
@@ -247,41 +199,23 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             // move map camera
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+            mHomeViewModel.handleViewOnCurrentLocationFetch(latLng);
 
-
-            LogUtility.d("onLocationChanged", String.format("mLatitude:%.3f mLongitude:%.3f", mLatitude, mLongitude));
-
-            //stop location updates
-            if (mGoogleApiClient != null) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-                LogUtility.d("onLocationChanged", "Removing Location Updates");
-            }
-            LogUtility.d("onLocationChanged", "Exit");
+            stopLocationUpdates();
 
             //call api to fetch nearby response
             mHomeViewModel.buildRetrofitAndGetResponse(mLatitude, mLongitude);
         }
     }
 
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-
-        mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        googleMap.getUiSettings().setZoomGesturesEnabled(true);
-        mMap.setOnMarkerClickListener(this);
-
-        if (PermissionUtility.isVersionMarshmallowAndAbove()) {
-            if (PermissionUtility.checkAccessLocationPermission(this)) {
-                mMap.setMyLocationEnabled(true);
-            }
-        } else {
-            mMap.setMyLocationEnabled(true);
+    private void stopLocationUpdates() {
+        //stop location updates
+        if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            LogUtility.d("onLocationChanged", "Removing Location Updates");
         }
     }
+
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -317,7 +251,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
                         if (mGoogleApiClient == null) {
                             buildGoogleApiClient();
                         }
-                        mMap.setMyLocationEnabled(true);
+                        if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
                     }
                 } else {
                     // Permission denied, Disable the functionality that depends on this permission.
@@ -326,12 +260,5 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
                 return;
         }
     }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        LogUtility.d("Tag", "marker click --" + marker.getTitle());
-        return false;
-    }
-
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by Supriya A on 12/28/2017.
  */
-public class FetchNearByRestaurants {
+public class GoogleLocationFetchResponse {
 
     @SerializedName("html_attributions")
     @Expose
