@@ -13,7 +13,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/food_image">
+        android:background="@drawable/splash_background">
 
         <LinearLayout
             android:layout_centerInParent="true"
@@ -51,16 +51,6 @@
 
             </RelativeLayout>
 
-            <com.google.android.gms.common.SignInButton
-
-                android:id="@+id/login_with_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/btn_40dp"
-                android:padding="@dimen/dimen_40"
-                android:visibility="@{!loginViewModel.isProgressRingVisible ?View.VISIBLE:View.INVISIBLE}" />
-
-
         </LinearLayout>
 
         <RelativeLayout
@@ -76,8 +66,24 @@
                 android:foreground="@drawable/progress_bar" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/colorAccent"
+            android:padding="@dimen/dimen_20dp"
+            android:visibility="@{!loginViewModel.isProgressRingVisible ?View.VISIBLE:View.GONE}">
 
 
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/login_with_google"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="@dimen/dimen_40"
+                android:layout_marginTop="@dimen/dimen_40"
+                android:text="@string/sign_in_with_google" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </layout>

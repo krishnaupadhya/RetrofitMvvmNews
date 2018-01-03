@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.shop.food.R;
 import com.shop.food.app.Constants;
 import com.shop.food.app.UrbanPiperApplication;
+import com.shop.food.auth.view.LoginActivity;
 import com.shop.food.data.DataManager;
 import com.shop.food.databinding.MapHomeActivityBinding;
 import com.shop.food.databinding.NavHeaderHomeBinding;
@@ -30,11 +32,9 @@ import com.shop.food.di.component.DaggerActivityComponent;
 import com.shop.food.di.module.ActivityModule;
 import com.shop.food.food.view.FoodListActivity;
 import com.shop.food.food.viewmodel.NavigationHeaderViewModel;
-import com.shop.food.manager.SessionManager;
-import com.shop.food.map.viewmodel.MapHomeActivityViewModel;
 import com.shop.food.map.listener.MapHomeListener;
+import com.shop.food.map.viewmodel.MapHomeActivityViewModel;
 import com.shop.food.utility.DialogUtility;
-import com.google.android.gms.location.LocationListener;
 import com.shop.food.utility.LogUtility;
 import com.shop.food.utility.NetworkUtility;
 import com.shop.food.utility.PermissionUtility;
@@ -258,10 +258,17 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
                         .positiveBtnTxt(getString(R.string.sign_out))
                         .negativeBtnTxt(getString(R.string.cancel))
                         .positiveBtnClickListener((dialogInterface, i) -> {
-                            SessionManager.logout();
-                            //openLoginPage();
+                            mDataManager.logout();
+                            openLoginPage();
                         });
         DialogUtility.showDialog(this, builder);
+    }
+
+    private void openLoginPage() {
+        if (!mDataManager.isUserLoggedIn()) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
     }
 
     @Override

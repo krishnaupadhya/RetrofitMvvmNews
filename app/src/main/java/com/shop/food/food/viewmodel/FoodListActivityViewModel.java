@@ -26,13 +26,15 @@ public class FoodListActivityViewModel extends BaseViewModel {
     public ObservableField<String> totalPrice;
     public ObservableField<String> subTotal;
     public ObservableField<String> deliveryCharges;
+    public ObservableField<String> title;
 
-    public FoodListActivityViewModel(FoodListListener homeListener) {
+    public FoodListActivityViewModel(FoodListListener homeListener, String title) {
         this.isProgressRingVisible = new ObservableField<>(false);
         this.isFoodListListVisible = new ObservableField<>(false);
         this.totalPrice = new ObservableField<>("₹ 0.0");
         this.subTotal = new ObservableField<>("₹ 0.0");
         this.deliveryCharges = new ObservableField<>("₹ 0.0");
+        this.title = new ObservableField<>(title);
         this.foodListListener = homeListener;
     }
 
@@ -52,6 +54,12 @@ public class FoodListActivityViewModel extends BaseViewModel {
         if (this.deliveryCharges == null)
             this.deliveryCharges = new ObservableField<>("₹ 0.0");
         this.deliveryCharges.set(deliveryCharges);
+    }
+
+    public void setTitle(String title) {
+        if (this.title == null)
+            this.title = new ObservableField<>();
+        this.totalPrice.set(title);
     }
 
     public void setIsFoodListListVisible(Boolean isFoodListListVisible) {

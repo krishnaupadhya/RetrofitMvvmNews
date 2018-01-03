@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.shop.food.di.scope.ApplicationContext;
-import com.shop.food.utility.PreferencesUtility;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -35,18 +34,18 @@ public class DataManager {
 
 
     public void logout() {
-        PreferencesUtility.remove(PreferencesUtility.PREF_KEY_SESSION_TOKEN);
-        PreferencesUtility.remove(PreferencesUtility.PREF_KEY_SESSION_NICK_NAME);
-        PreferencesUtility.remove(PreferencesUtility.PREF_KEY_EMAIL);
-        PreferencesUtility.remove(PreferencesUtility.PREF_KEY_PROFILE_IMAGE_URL);
+        mSharedPrefsHelper.deleteSavedData(SharedPrefsHelper.PREF_KEY_ACCESS_TOKEN);
+        mSharedPrefsHelper.deleteSavedData(SharedPrefsHelper.PREF_KEY_SESSION_NAME);
+        mSharedPrefsHelper.deleteSavedData(SharedPrefsHelper.PREF_KEY_EMAIL);
+        mSharedPrefsHelper.deleteSavedData(SharedPrefsHelper.PREF_KEY_PROFILE_IMAGE_URL);
     }
 
     public void setUserName(String userName) {
-        mSharedPrefsHelper.put(SharedPrefsHelper.PREF_KEY_SESSION_NICK_NAME, userName);
+        mSharedPrefsHelper.put(SharedPrefsHelper.PREF_KEY_SESSION_NAME, userName);
     }
 
     public String getUserName() {
-        return mSharedPrefsHelper.get(SharedPrefsHelper.PREF_KEY_SESSION_NICK_NAME, null);
+        return mSharedPrefsHelper.get(SharedPrefsHelper.PREF_KEY_SESSION_NAME, null);
     }
 
     public void setEmail(String email) {

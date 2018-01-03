@@ -8,7 +8,7 @@
         <import type="android.view.View" />
 
         <variable
-            name="homeViewModel"
+            name="foodListActivityViewModel"
             type="com.shop.food.food.viewmodel.FoodListActivityViewModel" />
     </data>
 
@@ -24,60 +24,101 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/app_bar_home"
+            android:layout_centerInParent="true"
             android:layout_marginTop="?attr/actionBarSize"
+            android:gravity="center"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+            <RelativeLayout
+                android:id="@+id/proceed_checkout_btn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_44"
+                android:layout_alignParentBottom="true"
+                android:background="@color/divider_color"
+                android:padding="@dimen/dimen_4dp"
+                android:visibility="@{foodListActivityViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/rounded_corners"
+                    android:onClick="@{foodListActivityViewModel::onProceedClick}"
+                    android:text="@string/proceed_to_checkout"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/title_lyt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_120dp"
+                android:layout_alignParentTop="true">
+
+                <ImageView
+                    android:alpha="0.7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/title_img" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="@dimen/dimen_20dp">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:ellipsize="end"
+                        android:fontFamily="sans-serif-light"
+                        android:maxLines="3"
+                        android:text="@{foodListActivityViewModel.title}"
+                        android:textColor="@color/white"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <android.support.v7.widget.AppCompatRatingBar
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:rating="3"
+                        android:theme="@style/RatingBar" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/list_news"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/proceed_checkout_btn"
+                android:layout_below="@id/title_lyt"
+                android:visibility="@{foodListActivityViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}" />
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
-                android:gravity="center">
+                android:visibility="@{foodListActivityViewModel.isFoodListListVisible ?View.GONE:View.VISIBLE}">
 
-                <RelativeLayout
-                    android:id="@+id/proceed_checkout_btn"
+                <include
+                    layout="@layout/no_contents_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_44"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/divider_color"
-                    android:padding="@dimen/dimen_4dp"
-                    android:visibility="@{homeViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}">
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/rounded_corners"
-                        android:onClick="@{homeViewModel::onProceedClick}"
-                        android:text="@string/proceed_to_checkout"
-                        android:textColor="@color/white" />
-                </RelativeLayout>
-
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_above="@id/proceed_checkout_btn"
-                        android:visibility="@{homeViewModel.isFoodListListVisible ?View.VISIBLE:View.GONE}"
-                        android:id="@+id/list_news"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:visibility="@{homeViewModel.isFoodListListVisible ?View.GONE:View.VISIBLE}">
-
-                    <include
-                        layout="@layout/no_contents_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </RelativeLayout>
+                    android:layout_height="match_parent" />
             </RelativeLayout>
-            <!-- Adding bottom sheet after main content -->
 
         </RelativeLayout>
+
 
         <RelativeLayout
             android:id="@+id/bottom_sheet"
@@ -101,7 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/rounded_corners"
-                    android:onClick="@{homeViewModel::onPlaceOrderClick}"
+                    android:onClick="@{foodListActivityViewModel::onPlaceOrderClick}"
                     android:text="@string/place_order"
                     android:textColor="@color/white" />
             </RelativeLayout>
@@ -132,16 +173,15 @@
                             android:layout_weight="2"
                             android:text="@string/sub_total"
                             android:textColor="#444"
-                            android:textSize="14dp"
-                            android:textStyle="bold" />
+                            android:textSize="14dp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{homeViewModel.subTotal}"
-                            android:textSize="15dp"
+                            android:text="@{foodListActivityViewModel.subTotal}"
+                            android:textSize="14sp"
                             android:textStyle="bold"></TextView>
                     </LinearLayout>
 
@@ -159,17 +199,15 @@
                             android:layout_weight="2"
                             android:text="@string/delivery_charges"
                             android:textColor="#444"
-                            android:textSize="14dp"
-                            android:textStyle="bold" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{homeViewModel.deliveryCharges}"
-                            android:textSize="14dp"
-                            android:textStyle="bold"></TextView>
+                            android:text="@{foodListActivityViewModel.deliveryCharges}"
+                            android:textSize="14sp"></TextView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -186,7 +224,7 @@
                             android:layout_weight="2"
                             android:text="@string/total_price"
                             android:textColor="#444"
-                            android:textSize="16dp"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -194,31 +232,31 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="right"
-                            android:text="@{homeViewModel.totalPrice}"
-                            android:textSize="16dp"
+                            android:text="@{foodListActivityViewModel.totalPrice}"
+                            android:textSize="15sp"
                             android:textStyle="bold"></TextView>
                     </LinearLayout>
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/margin_5dp"
                         android:text="@string/delivery_address"
                         android:textColor="#444"
-                        android:textSize="16dp"
-                        android:textStyle="bold" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/margin_5dp"
-                        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />
+                        android:text="Flat No 404, Skyline Apartments, Vizag - 500576"
+                        android:textSize="14sp" />
 
                 </LinearLayout>
             </RelativeLayout>
 
         </RelativeLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
 

@@ -23,7 +23,6 @@ import com.shop.food.event.FoodItemQtryChangeClickEvent;
 import com.shop.food.food.adapters.FoodListAdapter;
 import com.shop.food.food.listener.FoodListListener;
 import com.shop.food.food.viewmodel.FoodListActivityViewModel;
-import com.shop.food.manager.SessionManager;
 import com.shop.food.model.FoodInfo;
 import com.shop.food.utility.DialogUtility;
 
@@ -50,6 +49,7 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPageTitle = getIntent().getStringExtra(Constants.KEY_HOTEL_NAME);
         initBinding();
         initToolBar();
         initView();
@@ -57,7 +57,7 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
     }
 
     private void initView() {
-        mPageTitle = getIntent().getStringExtra(Constants.KEY_HOTEL_NAME);
+
         foodInfoArrayList = foodListActivityViewModel.fetchCachedData();
         setupFoodListView(foodInfoArrayList);
         sheetBehavior = BottomSheetBehavior.from(foodActivityBinding.bottomSheet);
@@ -95,8 +95,8 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
 
     private void initBinding() {
         foodActivityBinding = DataBindingUtil.setContentView(this, R.layout.food_activity);
-        foodListActivityViewModel = new FoodListActivityViewModel(this);
-        foodActivityBinding.setHomeViewModel(foodListActivityViewModel);
+        foodListActivityViewModel = new FoodListActivityViewModel(this, mPageTitle);
+        foodActivityBinding.setFoodListActivityViewModel(foodListActivityViewModel);
     }
 
     private void initToolBar() {
@@ -142,7 +142,8 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
             if (sheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 return true;
-            }
+            } else
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -164,26 +165,6 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
         foodInfoArrayList = foodListActivityViewModel.fetchCachedData();
         setupFoodListView(foodInfoArrayList);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    private void onSignOutClick() {
-        DialogUtility.Builder builder =
-                new DialogUtility.Builder()
-                        .message(getString(R.string.signout_confirmation_alert_message))
-                        .positiveBtnTxt(getString(R.string.sign_out))
-                        .negativeBtnTxt(getString(R.string.cancel))
-                        .positiveBtnClickListener((dialogInterface, i) -> {
-                            SessionManager.logout();
-                            openLoginPage();
-                        });
-        DialogUtility.showDialog(this, builder);
-    }
-
-    private void openLoginPage() {
-        if (!SessionManager.isUserLoggedIn()) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

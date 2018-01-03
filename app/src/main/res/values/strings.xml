@@ -19,4 +19,6 @@
     <string name="sub_total">Sub Total</string>
     <string name="order_success_msg">Order has been placed successfully</string>
     <string name="fetching_near_by_hotels">Fetching near by hotels...</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+>>>>>>> - food list activity updated
 </resources>

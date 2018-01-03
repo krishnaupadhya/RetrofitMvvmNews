@@ -16,6 +16,7 @@
         android:foreground="?attr/selectableItemBackgroundBorderless">
 
         <LinearLayout
+            android:id="@+id/root_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -56,7 +57,14 @@
                 android:textColor="@color/davy_gray"
                 android:textSize="13sp" />
 
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/root_layout"
+            android:background="@color/davy_gray" />
 
     </RelativeLayout>
 </layout>
