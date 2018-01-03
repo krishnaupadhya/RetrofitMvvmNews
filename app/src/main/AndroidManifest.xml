@@ -32,7 +32,7 @@
         <activity android:name=".map.NearByLocationActivity">
 
         </activity>
-        <activity android:name=".home.view.FoodListActivity">
+        <activity android:name=".food.view.FoodListActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
@@ -57,31 +57,6 @@
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
-        <!--<activity-->
-            <!--android:name=".detail.view.activity.DetailsActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/AppTheme" />-->
-
-        <service
-            android:name=".notificationUtils.FcmNotificationMessagingService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".notificationUtils.FireBaseTokenListener">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
-        <!-- Notification receiver for push messaging -->
-        <receiver android:name=".notificationUtils.NotificationReceiver">
-            <intent-filter>
-                <action android:name="com.hangout.received" />
-            </intent-filter>
-        </receiver>
 
     </application>
 

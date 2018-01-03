@@ -20,12 +20,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.urban.piper.R;
+import com.urban.piper.app.UrbanPiperApplication;
 import com.urban.piper.auth.listener.LoginListener;
 import com.urban.piper.auth.viewmodel.LoginActivityViewModel;
 import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.data.DataManager;
 import com.urban.piper.databinding.LoginActivityBinding;
-import com.urban.piper.home.view.FoodListActivity;
+import com.urban.piper.di.component.ActivityComponent;
+import com.urban.piper.di.component.DaggerActivityComponent;
+import com.urban.piper.di.module.ActivityModule;
+import com.urban.piper.food.view.FoodListActivity;
 import com.urban.piper.utility.DialogUtility;
 import com.urban.piper.utility.NetworkUtility;
 
@@ -42,9 +46,19 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     private LoginActivityViewModel loginViewModel;
     private final String TAG = LoginActivity.class.getSimpleName();
     private SignInButton signInButton;
-
+    private ActivityComponent activityComponent;
     @Inject
     DataManager mDataManager;
+
+    public ActivityComponent getActivityComponent() {
+        if (activityComponent == null) {
+            activityComponent = DaggerActivityComponent.builder()
+                    .activityModule(new ActivityModule(this))
+                    .applicationComponent(UrbanPiperApplication.get(this).getComponent())
+                    .build();
+        }
+        return activityComponent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +69,8 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     private void initBinding() {
         LoginActivityBinding loginActivityBinding = DataBindingUtil.setContentView(this, R.layout.login_activity);
         loginViewModel = new LoginActivityViewModel(this, this);
-        signInButton = (SignInButton) findViewById(R.id.login_with_google);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        getActivityComponent().inject(this);
+        loginActivityBinding.loginWithGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sigInGoogle(loginViewModel.mGoogleApiClient);

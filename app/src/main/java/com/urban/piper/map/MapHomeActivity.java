@@ -1,17 +1,11 @@
 package com.urban.piper.map;
 
-import android.Manifest;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,12 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,11 +28,10 @@ import com.urban.piper.R;
 import com.urban.piper.app.Constants;
 import com.urban.piper.databinding.MapHomeActivityBinding;
 import com.urban.piper.databinding.NavHeaderHomeBinding;
-import com.urban.piper.home.viewmodel.NavigationHeaderViewModel;
+import com.urban.piper.food.viewmodel.NavigationHeaderViewModel;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.model.FetchNearByRestaurants;
 import com.urban.piper.model.Result;
-import com.urban.piper.utility.CJRHotelLocationProvider;
 import com.urban.piper.utility.DialogUtility;
 import com.google.android.gms.location.LocationListener;
 import com.urban.piper.utility.LogUtility;
@@ -53,8 +42,6 @@ import java.util.List;
 
 import retrofit2.Response;
 import rx.Observable;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by Supriya A on 1/2/2018.

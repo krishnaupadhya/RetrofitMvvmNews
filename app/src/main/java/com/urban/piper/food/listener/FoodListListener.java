@@ -1,6 +1,4 @@
-package com.urban.piper.home.listener;
-
-import com.urban.piper.model.FoodInfo;
+package com.urban.piper.food.listener;
 
 /**
  * Created by Krishna Upadhya on 9/9/2017.

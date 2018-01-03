@@ -64,8 +64,6 @@ dependencies {
     //firebase google login
     compile 'com.google.firebase:firebase-auth:11.0.2'
     compile 'com.google.android.gms:play-services-auth:11.0.2'
-    compile 'com.google.firebase:firebase-messaging:11.0.2'
-    compile 'com.google.firebase:firebase-storage:11.0.2'
 
     //location API
     compile 'com.google.android.gms:play-services:11.0.2'

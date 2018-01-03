@@ -1,4 +1,4 @@
-package com.urban.piper.home.viewmodel;
+package com.urban.piper.food.viewmodel;
 
 import android.databinding.ObservableField;
 import android.graphics.Bitmap;
