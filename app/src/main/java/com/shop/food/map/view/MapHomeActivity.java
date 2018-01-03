@@ -6,11 +6,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -64,6 +66,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     private ActivityComponent activityComponent;
     @Inject
     DataManager mDataManager;
+    BottomSheetBehavior sheetBehavior;
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
@@ -82,8 +85,38 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         initBinding();
         getActivityComponent().inject(this);
         initToolBar();
+        initView();
         initDrawerLayout();
         initNavigationView();
+    }
+
+    private void initView() {
+
+        sheetBehavior = BottomSheetBehavior.from(mMapHomeActivityBinding.bottomSheet);
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
     }
 
     @Override
@@ -166,10 +199,24 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     }
 
     @Override
-    public void onMarkerClick(Result result) {
-        //fetch the hotel details
+    public void onMarkerClick(Result title) {
+        mHomeViewModel.setHotelName(title.getName());
+        if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
+
+    @Override
+    public void onShowMenuClick() {
+        openFoodList(mHomeViewModel.hotelName.get());
+    }
+
+    private void openFoodList(String title) {
         Intent intent = new Intent(this, FoodListActivity.class);
-        intent.putExtra(Constants.KEY_HOTEL_NAME, result.getName());
+        intent.putExtra(Constants.KEY_HOTEL_NAME, title);
         startActivity(intent);
     }
 
@@ -293,4 +340,11 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED)
+            super.onBackPressed();
+        else
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
 }

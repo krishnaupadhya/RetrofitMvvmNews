@@ -154,7 +154,6 @@ public class FoodListActivity extends BaseActivity implements FoodListListener {
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
         }
     }
 
