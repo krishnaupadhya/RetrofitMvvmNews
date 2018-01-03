@@ -9,6 +9,10 @@ import com.shop.food.di.scope.ApplicationContext;
 import dagger.Module;
 import dagger.Provides;
 
+/**
+ * Created by Supriya A on 1/2/2018.
+ */
+
 @Module
 public class ApplicationModule {
 

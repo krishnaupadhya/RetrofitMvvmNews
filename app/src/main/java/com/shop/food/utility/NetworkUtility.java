@@ -10,8 +10,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.shop.food.R;
 import com.shop.food.app.UrbanPiperApplication;
+
 /**
- * Created by Krishna Upadhya on 9/11/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class NetworkUtility {

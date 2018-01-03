@@ -1,4 +1,4 @@
-package com.shop.food.map;
+package com.shop.food.map.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.databinding.ObservableField;
@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.shop.food.app.Constants;
 import com.shop.food.common.viewmodel.BaseViewModel;
+import com.shop.food.map.listener.MapHomeListener;
 import com.shop.food.model.GoogleLocationFetchResponse;
 import com.shop.food.model.Result;
 import com.shop.food.network.NearByPlaceService;

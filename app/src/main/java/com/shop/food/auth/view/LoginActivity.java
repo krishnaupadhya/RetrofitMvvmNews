@@ -29,16 +29,17 @@ import com.shop.food.databinding.LoginActivityBinding;
 import com.shop.food.di.component.ActivityComponent;
 import com.shop.food.di.component.DaggerActivityComponent;
 import com.shop.food.di.module.ActivityModule;
-import com.shop.food.map.MapHomeActivity;
+import com.shop.food.map.view.MapHomeActivity;
 import com.shop.food.utility.DialogUtility;
 import com.shop.food.utility.NetworkUtility;
+import com.shop.food.utility.PermissionUtility;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
 
 /**
- * Created by Krishna Upadhya on 9/6/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class LoginActivity extends BaseActivity implements LoginListener {
@@ -64,6 +65,13 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
+        checkPermission();
+    }
+
+    private void checkPermission() {
+        if (PermissionUtility.isVersionMarshmallowAndAbove() && !PermissionUtility.checkLocationPermission(this)) {
+            return;
+        }
     }
 
     private void initBinding() {

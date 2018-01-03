@@ -3,11 +3,11 @@
     <string name="network_error_alert_message">Please check your internet connection and try again.</string>
     <string name="please_wait">please wait</string>
     <string name="signing_in">signing in..</string>
-    <string name="welcome_back">welcome back</string>
+    <string name="welcome_back">Welcome Back</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="sign_out">sign out</string>
-    <string name="cancel">cancel</string>
+    <string name="sign_out">Sign out</string>
+    <string name="cancel">Cancel</string>
     <string name="signout_confirmation_alert_message">Are you sure you want to signout?</string>
     <string name="no_contents_do_display">No contents to display.</string>
     <string name="action_settings">Settings</string>
@@ -18,5 +18,5 @@
     <string name="delivery_charges">Delivery Charges</string>
     <string name="sub_total">Sub Total</string>
     <string name="order_success_msg">Order has been placed successfully</string>
-    <string name="fetching_near_by_hotels">fetching near by hotels...</string>
+    <string name="fetching_near_by_hotels">Fetching near by hotels...</string>
 </resources>

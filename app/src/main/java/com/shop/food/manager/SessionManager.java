@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import com.shop.food.utility.PreferencesUtility;
 
 /**
- * Created by Krishna Upadhya on 9/6/2017.
+ * Created by Supriya A on 1/2/2018.
  */
 
 public class SessionManager {

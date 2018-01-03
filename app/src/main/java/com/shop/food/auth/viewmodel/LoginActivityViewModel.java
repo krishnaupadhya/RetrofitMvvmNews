@@ -24,7 +24,7 @@ import com.shop.food.auth.view.LoginActivity;
 import com.shop.food.common.viewmodel.BaseViewModel;
 
 /**
- * Created by Krishna Upadhya on 9/6/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class LoginActivityViewModel extends BaseViewModel {

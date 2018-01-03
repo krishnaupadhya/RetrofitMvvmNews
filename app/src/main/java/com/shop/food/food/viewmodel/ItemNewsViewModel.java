@@ -9,13 +9,12 @@ import android.view.View;
 
 import com.shop.food.event.FoodItemQtryChangeClickEvent;
 import com.shop.food.model.FoodInfo;
-import com.shop.food.utility.DateTimeUtility;
 import com.shop.food.utility.StringUtility;
 
 import org.greenrobot.eventbus.EventBus;
 
 /**
- * Created by Krishna Upadhya
+ * Created by Supriya A on 3/2/2018.
  */
 public class ItemNewsViewModel extends BaseObservable {
 
@@ -80,9 +79,7 @@ public class ItemNewsViewModel extends BaseObservable {
     }
 
 
-    public String getTime() {
-        return DateTimeUtility.getConvertedDate(foodInfo.getDate());
-    }
+
 
     public String getScore() {
         if (foodInfo != null)

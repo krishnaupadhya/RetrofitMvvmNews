@@ -9,7 +9,7 @@
 
         <variable
             name="mapHomeViewModel"
-            type="com.shop.food.map.MapHomeActivityViewModel" />
+            type="com.shop.food.map.viewmodel.MapHomeActivityViewModel" />
     </data>
 
     <android.support.v4.widget.DrawerLayout

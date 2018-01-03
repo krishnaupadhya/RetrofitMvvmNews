@@ -16,7 +16,7 @@ import com.shop.food.common.viewmodel.CustomToastViewModel;
 import com.shop.food.databinding.CustomToastBinding;
 
 /**
- * Created by Krishna Upadhya on 9/11/2017.
+ * Created by Supriya A on 1/2/2018.
  */
 
 public class DialogUtility {

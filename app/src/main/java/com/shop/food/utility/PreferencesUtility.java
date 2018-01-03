@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.shop.food.app.UrbanPiperApplication;
 /**
- * Created by Krishna Upadhya on 9/11/2017.
+ * Created by Supriya A on 1/2/2018.
  */
 
 public class PreferencesUtility {

@@ -1,8 +1,9 @@
 package com.shop.food.network;
 
 import retrofit.RestAdapter;
+
 /**
- * Created by Krishna Upadhya on 9/11/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class ServiceFactory {

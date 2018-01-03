@@ -27,33 +27,22 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key"/>
 
-
-        <activity android:name="com.shop.food.food.view.FoodListActivity">
-
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
         <activity android:name="com.shop.food.auth.view.LoginActivity">
 
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.shop.food.map.MapHomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name="com.shop.food.food.view.FoodListActivity"/>
+
+        <activity
+            android:name="com.shop.food.map.view.MapHomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"/>
+
 
     </application>
 

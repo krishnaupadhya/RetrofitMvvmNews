@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+/**
+ * Created by Supriya A on 3/2/2018.
+ */
 public class FoodListActivityViewModel extends BaseViewModel {
 
     private String TAG = FoodListActivityViewModel.class.getSimpleName();

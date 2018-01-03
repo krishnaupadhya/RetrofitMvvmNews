@@ -13,6 +13,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 
+/**
+ * Created by Supriya A on 1/2/2018.
+ */
 
 @Singleton
 @Component(modules = ApplicationModule.class)

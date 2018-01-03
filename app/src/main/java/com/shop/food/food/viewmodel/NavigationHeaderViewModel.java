@@ -5,6 +5,9 @@ import android.databinding.ObservableField;
 import com.shop.food.common.viewmodel.BaseViewModel;
 import com.shop.food.data.DataManager;
 
+/**
+ * Created by Supriya A on 1/2/2018.
+ */
 public class NavigationHeaderViewModel extends BaseViewModel {
 
     public ObservableField<String> name;

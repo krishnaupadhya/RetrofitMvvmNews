@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Krishna Upadhya on 9/6/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class FoodInfo extends RealmObject {

@@ -13,7 +13,7 @@ import com.shop.food.utility.DialogUtility;
 
 
 /**
- * Created by Krishna Upadhya on 9/6/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 
 public class BaseActivity  extends AppCompatActivity implements BaseListener {

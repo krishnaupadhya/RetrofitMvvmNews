@@ -1,4 +1,4 @@
-package com.shop.food.map;
+package com.shop.food.map.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -31,6 +31,8 @@ import com.shop.food.di.module.ActivityModule;
 import com.shop.food.food.view.FoodListActivity;
 import com.shop.food.food.viewmodel.NavigationHeaderViewModel;
 import com.shop.food.manager.SessionManager;
+import com.shop.food.map.viewmodel.MapHomeActivityViewModel;
+import com.shop.food.map.listener.MapHomeListener;
 import com.shop.food.utility.DialogUtility;
 import com.google.android.gms.location.LocationListener;
 import com.shop.food.utility.LogUtility;
@@ -76,7 +78,6 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkPermission();
-        buildGoogleApiClient();
         initBinding();
         getActivityComponent().inject(this);
         initToolBar();
@@ -160,6 +161,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         } else {
             if (mHomeViewModel != null) mHomeViewModel.setMapLocationEnabled();
         }
+        buildGoogleApiClient();
     }
 
     @Override

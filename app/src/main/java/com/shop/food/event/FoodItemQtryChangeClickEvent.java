@@ -3,7 +3,7 @@ package com.shop.food.event;
 import com.shop.food.model.FoodInfo;
 
 /**
- * Created by Krishna Upadhya on 9/9/2017.
+ * Created by Supriya A on 1/2/2018.
  */
 
 public class FoodItemQtryChangeClickEvent {

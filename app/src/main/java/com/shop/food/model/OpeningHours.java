@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Supriya A on 12/28/2017.
+ * Created by Supriya A on 2/2/2018.
  */
 public class OpeningHours {
 

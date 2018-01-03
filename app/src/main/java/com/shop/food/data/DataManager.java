@@ -9,7 +9,9 @@ import com.shop.food.utility.PreferencesUtility;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-
+/**
+ * Created by Supriya A on 1/2/2018.
+ */
 @Singleton
 public class DataManager {
 

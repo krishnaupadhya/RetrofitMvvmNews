@@ -13,6 +13,9 @@ import io.realm.Realm;
 import io.realm.RealmModel;
 import io.realm.RealmResults;
 
+/**
+ * Created by Supriya A on 1/2/2018.
+ */
 public class DatabaseController {
     private static DatabaseController instance;
     private Realm realm = null;
