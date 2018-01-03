@@ -39,7 +39,6 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
     private final MapHomeListener mMapHomeActivityListener;
     public ObservableField<Boolean> mProgressVisible;
     public ObservableField<String> hotelName;
-    public ObservableField<String> hotelImage;
     private GoogleMap mMap;
     private HashMap<Marker,Result> mMarkerResult = new HashMap<>();
 
@@ -47,7 +46,6 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
         mMapHomeActivityListener = maphomelistener;
         mProgressVisible = new ObservableField<>(true);
         hotelName = new ObservableField<>();
-        hotelImage = new ObservableField<>();
         mapFragment.getMapAsync(this);
     }
 
@@ -55,12 +53,6 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
         if (this.hotelName == null)
             this.hotelName = new ObservableField<>();
         this.hotelName.set(hotelName);
-    }
-
-    public void setHotelImage(String hotelImage) {
-        if (this.hotelImage == null)
-            this.hotelImage = new ObservableField<>();
-        this.hotelName.set(hotelImage);
     }
 
     public void buildRetrofitAndGetResponse(double latitude, double longitude) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -111,27 +112,27 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-
                     android:id="@+id/hotel_details"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_140dp"
+                    android:layout_height="@dimen/dimen_160dp"
                     android:layout_above="@id/check_menu_btn_lyt"
                     android:background="@drawable/gradient_background">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:text="@{mapHomeViewModel.hotelName}"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold"></TextView>
 
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
                         android:src="@drawable/title_img" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="@dimen/margin_5dp"
+                        android:text="@{mapHomeViewModel.hotelName}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
 
                 </RelativeLayout>

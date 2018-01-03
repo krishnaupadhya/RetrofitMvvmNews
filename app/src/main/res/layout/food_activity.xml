@@ -57,10 +57,10 @@
                 android:id="@+id/title_lyt"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_120dp"
-                android:layout_alignParentTop="true">
+                android:layout_alignParentTop="true"
+                android:background="@drawable/gradient_background">
 
                 <ImageView
-                    android:alpha="0.7"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"

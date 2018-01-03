@@ -199,8 +199,8 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     }
 
     @Override
-    public void onMarkerClick(Result title) {
-        mHomeViewModel.setHotelName(title.getName());
+    public void onMarkerClick(Result result) {
+        mHomeViewModel.setHotelName(result.getName());
         if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
