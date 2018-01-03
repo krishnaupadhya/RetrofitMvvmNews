@@ -20,6 +20,7 @@ import com.shop.food.network.NearByPlaceService;
 import com.shop.food.utility.LogUtility;
 import com.shop.food.utility.NetworkUtility;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,6 +38,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
     private final MapHomeListener mMapHomeActivityListener;
     public ObservableField<Boolean> mProgressVisible;
     private GoogleMap mMap;
+    private HashMap<Marker,Result> mMarkerResult = new HashMap<>();
 
     public MapHomeActivityViewModel(MapHomeListener maphomelistener, SupportMapFragment mapFragment) {
         mMapHomeActivityListener = maphomelistener;
@@ -85,6 +87,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
 
     private void handleResultFetched(Response<GoogleLocationFetchResponse> response) {
         mMap.clear();
+        mMarkerResult.clear();
         // This loop will go through all the results and add marker on each location.
         List<Result> resultList = response.body().getResults();
         if(resultList != null && resultList.size() > 0) {
@@ -93,7 +96,8 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
                         .position(new LatLng(placeMap.getGeometry().getLocation().getLat(), placeMap.getGeometry().getLocation().getLng()))
                         .title(placeMap.getName())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).snippet(placeMap.getVicinity());
-                mMap.addMarker(options);
+                Marker marker =  mMap.addMarker(options);
+                mMarkerResult.put(marker,placeMap);
             });
         }
     }
@@ -119,7 +123,14 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        if(mMapHomeActivityListener != null)mMapHomeActivityListener.onMarkerClick(marker.getTitle());
+
+        if(mMarkerResult != null && mMarkerResult.size() >0) {
+            Result result = mMarkerResult.get(marker);
+            LogUtility.d("Tag", "result marker --" + result.getName());
+            if(mMapHomeActivityListener != null)mMapHomeActivityListener.onMarkerClick(result);
+        }
+
+
         return false;
     }
 

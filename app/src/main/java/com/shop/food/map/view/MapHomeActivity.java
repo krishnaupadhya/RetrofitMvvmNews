@@ -34,6 +34,7 @@ import com.shop.food.food.view.FoodListActivity;
 import com.shop.food.food.viewmodel.NavigationHeaderViewModel;
 import com.shop.food.map.listener.MapHomeListener;
 import com.shop.food.map.viewmodel.MapHomeActivityViewModel;
+import com.shop.food.model.Result;
 import com.shop.food.utility.DialogUtility;
 import com.shop.food.utility.LogUtility;
 import com.shop.food.utility.NetworkUtility;
@@ -165,12 +166,11 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     }
 
     @Override
-    public void onMarkerClick(String title) {
+    public void onMarkerClick(Result result) {
         //fetch the hotel details
         Intent intent = new Intent(this, FoodListActivity.class);
-        intent.putExtra(Constants.KEY_HOTEL_NAME, title);
+        intent.putExtra(Constants.KEY_HOTEL_NAME, result.getName());
         startActivity(intent);
-
     }
 
     @Override
