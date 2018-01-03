@@ -3,7 +3,7 @@ package com.urban.piper.di.component;
 import com.urban.piper.auth.view.LoginActivity;
 import com.urban.piper.di.module.ActivityModule;
 import com.urban.piper.di.scope.PerActivity;
-import com.urban.piper.home.view.FoodListActivity;
+import com.urban.piper.food.view.FoodListActivity;
 
 import dagger.Component;
 

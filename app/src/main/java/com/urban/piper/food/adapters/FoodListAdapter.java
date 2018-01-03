@@ -1,4 +1,4 @@
-package com.urban.piper.home.adapters;
+package com.urban.piper.food.adapters;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.urban.piper.R;
 import com.urban.piper.databinding.ItemFoodBinding;
-import com.urban.piper.home.viewmodel.ItemNewsViewModel;
+import com.urban.piper.food.viewmodel.ItemNewsViewModel;
 import com.urban.piper.model.FoodInfo;
 
 import java.util.ArrayList;

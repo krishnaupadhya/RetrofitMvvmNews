@@ -1,11 +1,11 @@
-package com.urban.piper.home.viewmodel;
+package com.urban.piper.food.viewmodel;
 
 import android.databinding.ObservableField;
 import android.view.View;
 
 import com.urban.piper.app.DatabaseController;
 import com.urban.piper.common.viewmodel.BaseViewModel;
-import com.urban.piper.home.listener.FoodListListener;
+import com.urban.piper.food.listener.FoodListListener;
 import com.urban.piper.model.FoodInfo;
 import com.urban.piper.utility.LogUtility;
 

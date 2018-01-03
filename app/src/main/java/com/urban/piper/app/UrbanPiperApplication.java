@@ -1,6 +1,7 @@
 package com.urban.piper.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.urban.piper.data.DataManager;
@@ -24,6 +25,7 @@ public class UrbanPiperApplication extends Application {
 
     @Inject
     DataManager dataManager;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -61,8 +63,11 @@ public class UrbanPiperApplication extends Application {
         Realm.setDefaultConfiguration(realmConfigurationDNation);
     }
 
+    public static UrbanPiperApplication get(Context context) {
+        return (UrbanPiperApplication) context.getApplicationContext();
+    }
 
-    public ApplicationComponent getComponent(){
+    public ApplicationComponent getComponent() {
         return applicationComponent;
     }
 }

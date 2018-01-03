@@ -16,19 +16,27 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.urban.piper.R;
 import com.urban.piper.app.Constants;
 import com.urban.piper.databinding.MapHomeActivityBinding;
 import com.urban.piper.databinding.NavHeaderHomeBinding;
-import com.urban.piper.home.viewmodel.NavigationHeaderViewModel;
+import com.urban.piper.food.viewmodel.NavigationHeaderViewModel;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.utility.DialogUtility;
 import com.google.android.gms.location.LocationListener;
 import com.urban.piper.utility.LogUtility;
 import com.urban.piper.utility.NetworkUtility;
 import com.urban.piper.utility.PermissionUtility;
+
+import java.util.List;
+
+import retrofit2.Response;
+import rx.Observable;
 
 /**
  * Created by Supriya A on 1/2/2018.

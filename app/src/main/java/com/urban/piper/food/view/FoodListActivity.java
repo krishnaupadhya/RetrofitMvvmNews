@@ -1,4 +1,4 @@
-package com.urban.piper.home.view;
+package com.urban.piper.food.view;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -20,9 +20,9 @@ import com.urban.piper.auth.view.LoginActivity;
 import com.urban.piper.common.view.BaseActivity;
 import com.urban.piper.databinding.FoodActivityBinding;
 import com.urban.piper.event.FoodItemQtryChangeClickEvent;
-import com.urban.piper.home.adapters.FoodListAdapter;
-import com.urban.piper.home.listener.FoodListListener;
-import com.urban.piper.home.viewmodel.FoodListActivityViewModel;
+import com.urban.piper.food.adapters.FoodListAdapter;
+import com.urban.piper.food.listener.FoodListListener;
+import com.urban.piper.food.viewmodel.FoodListActivityViewModel;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.model.FoodInfo;
 import com.urban.piper.utility.DialogUtility;
