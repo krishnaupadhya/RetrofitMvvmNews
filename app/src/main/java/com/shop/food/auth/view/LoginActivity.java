@@ -65,6 +65,7 @@ public class LoginActivity extends BaseActivity implements LoginListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initBinding();
+        checkPermission();
     }
 
     private void checkPermission() {
@@ -172,7 +173,6 @@ public class LoginActivity extends BaseActivity implements LoginListener {
             NetworkUtility.showNetworkError(this);
             return;
         }
-        checkPermission();
         showProgressDialog(getString(R.string.signing_in));
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);

@@ -91,8 +91,8 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
             rx.Observable.from(resultList).forEach(placeMap -> {
                 MarkerOptions options = new MarkerOptions()
                         .position(new LatLng(placeMap.getGeometry().getLocation().getLat(), placeMap.getGeometry().getLocation().getLng()))
-                        .title(placeMap.getName() + ":" + placeMap.getVicinity())
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                        .title(placeMap.getName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)).snippet(placeMap.getVicinity());
                 mMap.addMarker(options);
             });
         }
