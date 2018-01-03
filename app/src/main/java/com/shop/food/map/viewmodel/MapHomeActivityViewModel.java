@@ -2,6 +2,7 @@ package com.shop.food.map.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.databinding.ObservableField;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,18 +38,34 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
 
     private final MapHomeListener mMapHomeActivityListener;
     public ObservableField<Boolean> mProgressVisible;
+    public ObservableField<String> hotelName;
+    public ObservableField<String> hotelImage;
     private GoogleMap mMap;
     private HashMap<Marker,Result> mMarkerResult = new HashMap<>();
 
     public MapHomeActivityViewModel(MapHomeListener maphomelistener, SupportMapFragment mapFragment) {
         mMapHomeActivityListener = maphomelistener;
         mProgressVisible = new ObservableField<>(true);
+        hotelName = new ObservableField<>();
+        hotelImage = new ObservableField<>();
         mapFragment.getMapAsync(this);
+    }
+
+    public void setHotelName(String hotelName) {
+        if (this.hotelName == null)
+            this.hotelName = new ObservableField<>();
+        this.hotelName.set(hotelName);
+    }
+
+    public void setHotelImage(String hotelImage) {
+        if (this.hotelImage == null)
+            this.hotelImage = new ObservableField<>();
+        this.hotelName.set(hotelImage);
     }
 
     public void buildRetrofitAndGetResponse(double latitude, double longitude) {
 
-        if(NetworkUtility.isNetworkAvailable()) {
+        if (NetworkUtility.isNetworkAvailable()) {
             String url = NearByPlaceService.SERVICE_ENDPOINT;
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -80,7 +97,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
                 }
 
             });
-        }else{
+        } else {
             removeProgress();
         }
     }
@@ -90,7 +107,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
         mMarkerResult.clear();
         // This loop will go through all the results and add marker on each location.
         List<Result> resultList = response.body().getResults();
-        if(resultList != null && resultList.size() > 0) {
+        if (resultList != null && resultList.size() > 0) {
             rx.Observable.from(resultList).forEach(placeMap -> {
                 MarkerOptions options = new MarkerOptions()
                         .position(new LatLng(placeMap.getGeometry().getLocation().getLat(), placeMap.getGeometry().getLocation().getLng()))
@@ -102,7 +119,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
         }
     }
 
-    public void removeProgress(){
+    public void removeProgress() {
         mProgressVisible.set(false);
     }
 
@@ -112,7 +129,7 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.setOnMarkerClickListener(this);
-        if(mMapHomeActivityListener != null) mMapHomeActivityListener.checkPermissionOnMapReady();
+        if (mMapHomeActivityListener != null) mMapHomeActivityListener.checkPermissionOnMapReady();
     }
 
 
@@ -132,6 +149,10 @@ public class MapHomeActivityViewModel extends BaseViewModel implements OnMapRead
 
 
         return false;
+    }
+
+    public void onShowMenuClick(View v) {
+        mMapHomeActivityListener.onShowMenuClick();
     }
 
     public void handleViewOnCurrentLocationFetch(LatLng latLng) {

@@ -19,63 +19,126 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.design.widget.CoordinatorLayout
 
-            <include
-                android:id="@+id/app_bar_home"
-                layout="@layout/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#efefef">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/app_bar_home">
+                android:layout_height="match_parent">
 
-                <FrameLayout
+                <include
+                    android:id="@+id/app_bar_home"
+                    layout="@layout/app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:gravity="center">
-
-                    <fragment
-                        android:id="@+id/map"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </FrameLayout>
+                    android:layout_height="?attr/actionBarSize" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:background="@color/white"
-                    android:clickable="true"
-                    android:visibility="@{mapHomeViewModel.mProgressVisible ? View.VISIBLE:View.GONE}">
+                    android:layout_below="@id/app_bar_home">
 
-                    <ProgressBar
-                        android:id="@+id/progressBar"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:foreground="@drawable/progress_bar"
-                        android:progressDrawable="@drawable/progress_bar" />
-
-                    <android.support.v7.widget.AppCompatTextView
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_below="@id/progressBar"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center_horizontal"
-                        android:paddingTop="@dimen/margin_5dp"
-                        android:text="@string/fetching_near_by_hotels" />
+                        android:layout_centerInParent="true"
+                        android:gravity="center">
+
+                        <fragment
+                            android:id="@+id/map"
+                            android:name="com.google.android.gms.maps.SupportMapFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </FrameLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:background="@color/white"
+                        android:clickable="true"
+                        android:visibility="@{mapHomeViewModel.mProgressVisible ? View.VISIBLE:View.GONE}">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:foreground="@drawable/progress_bar"
+                            android:progressDrawable="@drawable/progress_bar" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/progressBar"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_horizontal"
+                            android:paddingTop="@dimen/margin_5dp"
+                            android:text="@string/fetching_near_by_hotels" />
+                    </RelativeLayout>
                 </RelativeLayout>
+
             </RelativeLayout>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/bottom_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:background="#8Cffffff"
+                app:behavior_hideable="true"
+                app:behavior_peekHeight="0dp"
+                app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+                <RelativeLayout
+                    android:id="@+id/check_menu_btn_lyt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_44"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/divider_color"
+                    android:padding="@dimen/dimen_4dp">
+
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/rounded_corners"
+                        android:onClick="@{mapHomeViewModel::onShowMenuClick}"
+                        android:text="@string/show_food_menu"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout
+
+                    android:id="@+id/hotel_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_140dp"
+                    android:layout_above="@id/check_menu_btn_lyt"
+                    android:background="@drawable/gradient_background">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:text="@{mapHomeViewModel.hotelName}"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"></TextView>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/title_img" />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
 
         <android.support.design.widget.NavigationView
             android:id="@+id/nav_view"

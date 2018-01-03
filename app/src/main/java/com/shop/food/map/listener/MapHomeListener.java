@@ -9,4 +9,5 @@ import com.shop.food.model.Result;
 public interface MapHomeListener {
     void checkPermissionOnMapReady();
     void onMarkerClick(Result title);
+    void onShowMenuClick();
 }
