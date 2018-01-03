@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "933798908511",
-    "firebase_url": "https://urbanpiper-16b2f.firebaseio.com",
-    "project_id": "urbanpiper-16b2f",
-    "storage_bucket": "urbanpiper-16b2f.appspot.com"
+    "project_number": "220669918675",
+    "firebase_url": "https://foodshop-9cf71.firebaseio.com",
+    "project_id": "foodshop-9cf71",
+    "storage_bucket": "foodshop-9cf71.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:933798908511:android:8697a0fe4e14e17d",
+        "mobilesdk_app_id": "1:220669918675:android:4221ce402974b629",
         "android_client_info": {
-          "package_name": "com.urban.piper"
+          "package_name": "com.shop.food"
         }
       },
       "oauth_client": [
         {
-          "client_id": "933798908511-9vrhmrkti0meldpklvv89u6l9ooiri8r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.urban.piper",
-            "certificate_hash": "5b68838fcb4c9af9941c1468a772dc50f06572ce"
-          }
-        },
-        {
-          "client_id": "933798908511-mi3u7ttgcflcjemovbtfli50lq7elf7k.apps.googleusercontent.com",
+          "client_id": "220669918675-k9japb891matl6v6tqi8bibboil155il.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB6oGMNP9gTfYSfYmKOhHovJYRT54R8dLQ"
+          "current_key": "AIzaSyCNeoyC5uGO5VU7Vsim9GI1lHP8FPxLt-E"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "933798908511-mi3u7ttgcflcjemovbtfli50lq7elf7k.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

@@ -6,7 +6,7 @@
 
         <variable
             name="navigationHeaderViewModel"
-            type="com.urban.piper.food.viewmodel.NavigationHeaderViewModel" />
+            type="com.shop.food.food.viewmodel.NavigationHeaderViewModel" />
     </data>
 
     <RelativeLayout

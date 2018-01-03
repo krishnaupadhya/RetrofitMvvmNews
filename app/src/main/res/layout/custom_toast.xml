@@ -5,7 +5,7 @@
 
         <variable
             name="customToastViewModel"
-            type="com.urban.piper.common.viewmodel.CustomToastViewModel" />
+            type="com.shop.food.common.viewmodel.CustomToastViewModel" />
     </data>
 
     <LinearLayout

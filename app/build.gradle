@@ -6,7 +6,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
     defaultConfig {
-        applicationId "com.urban.piper"
+        applicationId "com.shop.food"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
