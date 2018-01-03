@@ -30,6 +30,7 @@ import com.urban.piper.di.component.ActivityComponent;
 import com.urban.piper.di.component.DaggerActivityComponent;
 import com.urban.piper.di.module.ActivityModule;
 import com.urban.piper.food.view.FoodListActivity;
+import com.urban.piper.map.MapHomeActivity;
 import com.urban.piper.utility.DialogUtility;
 import com.urban.piper.utility.NetworkUtility;
 
@@ -153,7 +154,7 @@ public class LoginActivity extends BaseActivity implements LoginListener {
 
     public void openHomePage() {
 
-        startActivity(new Intent(LoginActivity.this, FoodListActivity.class));
+        startActivity(new Intent(LoginActivity.this, MapHomeActivity.class));
         finish();
 
     }

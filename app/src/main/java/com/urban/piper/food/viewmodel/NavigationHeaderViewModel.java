@@ -1,72 +1,38 @@
 package com.urban.piper.food.viewmodel;
 
 import android.databinding.ObservableField;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.urban.piper.app.Constants;
 import com.urban.piper.common.viewmodel.BaseViewModel;
-import com.urban.piper.manager.SessionManager;
-import com.urban.piper.utility.LogUtility;
-
-import java.io.File;
-import java.io.IOException;
+import com.urban.piper.data.DataManager;
 
 public class NavigationHeaderViewModel extends BaseViewModel {
-    public ObservableField<Bitmap> profileImgBitmap;
-    private static final String TAG = NavigationHeaderViewModel.class.getSimpleName();
 
-    public NavigationHeaderViewModel() {
-        this.profileImgBitmap = new ObservableField<>(null);
-        setImageBackground();
-    }
+    public ObservableField<String> name;
+    public ObservableField<String> email;
+    public ObservableField<String> imageUrl;
+    public DataManager mDataManger;
 
-    private void setImageBackground() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReferenceFromUrl(Constants.FIREBASE_CLOUD_URL).child(Constants.BACKGROUND_IMAGE);
-        try {
-            final File localFile = File.createTempFile("images", "jpg");
-            storageRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                    setProfileImgBitmap(bitmap);
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    LogUtility.d(TAG, exception.getMessage());
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
+    public NavigationHeaderViewModel(DataManager dataManager) {
+        name = new ObservableField<>();
+        email = new ObservableField<>();
+        imageUrl = new ObservableField<>();
+        this.mDataManger = dataManager;
+        if (dataManager != null) {
+            setEmail(dataManager.getEmail());
+            setImageUrl(dataManager.getProfileImageUrl());
+            setName(dataManager.getUserName());
         }
     }
 
-    public void setProfileImgBitmap(Bitmap profileImgBitmap) {
-        this.profileImgBitmap.set(profileImgBitmap);
+    public void setEmail(String email) {
+        this.email.set(email);
     }
 
-    public String getName() {
-        return SessionManager.getUserName();
+    public void setName(String name) {
+        this.name.set(name);
     }
 
-    public String getEmailId() {
-        return SessionManager.getEmail();
-    }
-
-    public String getProfileImgUrl() {
-        return SessionManager.getProfileImageUrl();
-    }
-
-    public void refresh() {
-        notifyChange();
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl.set(imageUrl);
     }
 }

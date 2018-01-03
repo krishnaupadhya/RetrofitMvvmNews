@@ -18,4 +18,5 @@
     <string name="delivery_charges">Delivery Charges</string>
     <string name="sub_total">Sub Total</string>
     <string name="order_success_msg">Order has been placed successfully</string>
+    <string name="fetching_near_by_hotels">fetching near by hotels...</string>
 </resources>

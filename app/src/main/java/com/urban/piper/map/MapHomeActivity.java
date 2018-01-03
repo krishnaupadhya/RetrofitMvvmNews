@@ -1,5 +1,6 @@
 package com.urban.piper.map;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.os.Bundle;
@@ -23,8 +24,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.urban.piper.R;
 import com.urban.piper.app.Constants;
+import com.urban.piper.app.UrbanPiperApplication;
+import com.urban.piper.data.DataManager;
 import com.urban.piper.databinding.MapHomeActivityBinding;
 import com.urban.piper.databinding.NavHeaderHomeBinding;
+import com.urban.piper.di.component.ActivityComponent;
+import com.urban.piper.di.component.DaggerActivityComponent;
+import com.urban.piper.di.module.ActivityModule;
+import com.urban.piper.food.view.FoodListActivity;
 import com.urban.piper.food.viewmodel.NavigationHeaderViewModel;
 import com.urban.piper.manager.SessionManager;
 import com.urban.piper.utility.DialogUtility;
@@ -35,6 +42,8 @@ import com.urban.piper.utility.PermissionUtility;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit2.Response;
 import rx.Observable;
 
@@ -43,7 +52,7 @@ import rx.Observable;
  */
 
 public class MapHomeActivity extends AppCompatActivity implements MapHomeListener, NavigationView.OnNavigationItemSelectedListener,
-       GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
     //Binding Fields
@@ -57,7 +66,19 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private LocationRequest mLocationRequest;
+    private ActivityComponent activityComponent;
+    @Inject
+    DataManager mDataManager;
 
+    public ActivityComponent getActivityComponent() {
+        if (activityComponent == null) {
+            activityComponent = DaggerActivityComponent.builder()
+                    .activityModule(new ActivityModule(this))
+                    .applicationComponent(UrbanPiperApplication.get(this).getComponent())
+                    .build();
+        }
+        return activityComponent;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +86,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         checkPermission();
         buildGoogleApiClient();
         initBinding();
+        getActivityComponent().inject(this);
         initToolBar();
         initDrawerLayout();
         initNavigationView();
@@ -94,7 +116,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     @Override
     protected void onStop() {
         super.onStop();
-        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
     }
@@ -106,14 +128,13 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        mHomeViewModel = new MapHomeActivityViewModel(this,mapFragment);
+        mHomeViewModel = new MapHomeActivityViewModel(this, mapFragment);
         mMapHomeActivityBinding.setMapHomeViewModel(mHomeViewModel);
     }
 
     private void initToolBar() {
         setSupportActionBar(mMapHomeActivityBinding.appBarHome.toolbar);
     }
-
 
 
     private void initDrawerLayout() {
@@ -129,7 +150,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
         NavHeaderHomeBinding navHeaderBinding = DataBindingUtil.inflate(getLayoutInflater(), R.layout.nav_header_home,
                 mMapHomeActivityBinding.navView, false);
         mMapHomeActivityBinding.navView.addHeaderView(navHeaderBinding.getRoot());
-        mNavigationHeaderViewModel = new NavigationHeaderViewModel();
+        mNavigationHeaderViewModel = new NavigationHeaderViewModel(mDataManager);
         navHeaderBinding.setNavigationHeaderViewModel(mNavigationHeaderViewModel);
     }
 
@@ -138,21 +159,23 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
     }
 
 
-
     @Override
     public void checkPermissionOnMapReady() {
         if (PermissionUtility.isVersionMarshmallowAndAbove()) {
             if (PermissionUtility.checkAccessLocationPermission(this)) {
-               if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
+                if (mHomeViewModel != null) mHomeViewModel.setMapLocationEnabled();
             }
         } else {
-            if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
+            if (mHomeViewModel != null) mHomeViewModel.setMapLocationEnabled();
         }
     }
 
     @Override
     public void onMarkerClick(String title) {
         //fetch the hotel details
+        Intent intent = new Intent(this, FoodListActivity.class);
+        intent.putExtra(Constants.KEY_HOTEL_NAME, title);
+        startActivity(intent);
 
     }
 
@@ -259,7 +282,7 @@ public class MapHomeActivity extends AppCompatActivity implements MapHomeListene
                         if (mGoogleApiClient == null) {
                             buildGoogleApiClient();
                         }
-                        if(mHomeViewModel != null)mHomeViewModel.setMapLocationEnabled();
+                        if (mHomeViewModel != null) mHomeViewModel.setMapLocationEnabled();
                     }
                 } else {
                     // Permission denied, Disable the functionality that depends on this permission.

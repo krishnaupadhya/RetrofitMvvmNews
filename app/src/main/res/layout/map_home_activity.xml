@@ -48,20 +48,30 @@
 
                 </FrameLayout>
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
                     android:background="@color/white"
                     android:clickable="true"
                     android:visibility="@{mapHomeViewModel.mProgressVisible ? View.VISIBLE:View.GONE}">
 
                     <ProgressBar
+                        android:id="@+id/progressBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:progressDrawable="@drawable/progress_bar"
-                        android:theme="@style/AppTheme.OrangeAccent" />
+                        android:foreground="@drawable/progress_bar"
+                        android:progressDrawable="@drawable/progress_bar" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/progressBar"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_horizontal"
+                        android:paddingTop="@dimen/margin_5dp"
+                        android:text="@string/fetching_near_by_hotels" />
                 </RelativeLayout>
             </RelativeLayout>
 
