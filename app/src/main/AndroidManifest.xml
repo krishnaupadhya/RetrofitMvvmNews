@@ -27,13 +27,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".home.view.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-
-
         <activity
             android:name=".detail.view.activity.DetailsActivity"
             android:screenOrientation="portrait"
@@ -59,6 +56,14 @@
                 <action android:name="com.hangout.received" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".home.view.SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
     </application>
 
 </manifest>
